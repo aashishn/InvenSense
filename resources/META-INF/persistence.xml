@@ -6,7 +6,6 @@
       	<class>com.invensense.model.Account</class>
       	<class>com.invensense.model.ErrorLog</class>
       	<class>com.invensense.model.Job</class>
-      	<class>com.invensense.model.EventObject</class>
       	<class>com.invensense.model.SystemProperty</class>
       	<class>com.invensense.model.ForeCast</class>
       	<class>com.invensense.model.User</class>
