@@ -57,7 +57,7 @@
 	</target>
 
 	<!--  create war file-->
-	<target name="create-war" depends="check-env,compile,substitute-values">
+	<target name="create-war" depends="compile">
 	    <copy file="${basedir}/resources/log4j.xml" tofile="${dir.classes}/log4j.xml" overwrite="true">
 	    	<filterchain>
 	    		<replacestring from="{appname}" to="${ant.project.name}" />
@@ -193,15 +193,6 @@
 	<target name="clean-tomcat">
 		<delete dir="${deploy.dir}/${ant.project.name}" />
 		<delete file="${deploy.dir}/${ant.project.name}.war" />
-		<delete dir="${deploy.dir}/../work/Catalina" />
-		
-		<delete>
-			<fileset dir="${deploy.dir}/../logs">		  
-				<include name="**/*.*"/>		  	  
-			</fileset>
-		</delete>
-		
-		<delete dir="${deploy.dir}/../conf/Catalina" />
 	</target>
 	
 </project>

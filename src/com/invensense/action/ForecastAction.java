@@ -42,6 +42,7 @@ import com.invensense.model.User;
 import com.invensense.service.EntityService;
 import com.invensense.service.impl.ForecastService;
 import com.invensense.service.impl.SCForecastImpl;
+import com.invensense.service.impl.UserDetailsHcmService;
 import com.invensense.util.CommonUtil;
 import com.invensense.util.Constants;
 import com.invensense.ws.fusion.stubs.customObject.ForecastCustomC;
@@ -64,12 +65,6 @@ public class ForecastAction extends BaseAction {
 
 	@Resource
 	private EntityService entityService ;
-	
-//	@Resource
-//	private CrmodService crmodService;
-	
-//	@Resource
-//	private ForeCastSyncJob foreCastSyncJob;
 
 	private int rowId;
 
@@ -94,8 +89,10 @@ public class ForecastAction extends BaseAction {
 		
 		// Validate SSO Token for Forecast UI.
 		if((salesRepId!=null && !salesRepId.equals(""))) {
+			UserDetailsHcmService userDetailsHcmService = new UserDetailsHcmService();
+			
 			//if (!CommonUtil.validateSSOToken(CRMODSessionManager.getCRMODSessionManager().getUrl(), ssoToken, salesRepId, action)) {
-			if(false) {
+			if(!userDetailsHcmService.validateJwtToken(ssoToken)) {
 	  			log.error("Error validating SSO Token");	  			
 	  			return "authenticationFailure";
 	  		} else {
