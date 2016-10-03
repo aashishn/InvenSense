@@ -5,7 +5,7 @@
 		class="org.apache.log4j.RollingFileAppender">
 		<param name="maxFileSize" value="3000KB" />
 		<param name="maxBackupIndex" value="5" />
-		<param name="File" value="${catalina.home}/logs/InvenSense.log" />
+		<param name="File" value="/opt/tomcat/logs/InvenSense.log" />
 		<param name="threshold" value="info" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern"
@@ -17,7 +17,7 @@
 		class="org.apache.log4j.RollingFileAppender">
 		<param name="maxFileSize" value="3000KB" />
 		<param name="maxBackupIndex" value="5" />
-		<param name="File" value="${catalina.home}/logs/InvenSense-info.log" />
+		<param name="File" value="/opt/tomcat/logs/InvenSense-info.log" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern"
 				value="%d{DATE} %5p %c{1}:%L - %m%n" />
@@ -32,7 +32,7 @@
 		class="org.apache.log4j.RollingFileAppender">
 		<param name="maxFileSize" value="3000KB" />
 		<param name="maxBackupIndex" value="5" />
-		<param name="File" value="${catalina.home}/logs/InvenSense-debug.log" />
+		<param name="File" value="/opt/tomcat/logs/InvenSense-debug.log" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern"
 				value="%d{DATE} %5p %c{1}:%L - %m%n" />
@@ -47,7 +47,7 @@
 		class="org.apache.log4j.RollingFileAppender">
 		<param name="maxFileSize" value="3000KB" />
 		<param name="maxBackupIndex" value="5" />
-		<param name="File" value="${catalina.home}/logs/InvenSense-warn.log" />
+		<param name="File" value="/opt/tomcat/logs/InvenSense-warn.log" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern"
 				value="%d{DATE} %5p %c{1}:%L - %m%n" />
@@ -62,7 +62,7 @@
 		class="org.apache.log4j.RollingFileAppender">
 		<param name="maxFileSize" value="3000KB" />
 		<param name="maxBackupIndex" value="5" />
-		<param name="File" value="${catalina.home}/logs/InvenSense-error.log" />
+		<param name="File" value="/opt/tomcat/logs/InvenSense-error.log" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern"
 				value="%d{DATE} %5p %c{1}:%L - %m%n" />
