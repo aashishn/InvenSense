@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd" >
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+	<appender name="file"
+		class="org.apache.log4j.RollingFileAppender">
+		<param name="maxFileSize" value="3000KB" />
+		<param name="maxBackupIndex" value="5" />
+		<param name="File" value="${catalina.home}/logs/InvenSense.log" />
+		<param name="threshold" value="info" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="%d{DATE} %5p %c{1}:%L - %m%n" />
+		</layout>
+	</appender>
+	
+	<appender name="infofile"
+		class="org.apache.log4j.RollingFileAppender">
+		<param name="maxFileSize" value="3000KB" />
+		<param name="maxBackupIndex" value="5" />
+		<param name="File" value="${catalina.home}/logs/InvenSense-info.log" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="%d{DATE} %5p %c{1}:%L - %m%n" />
+		</layout>
+<!--		<filter class="org.apache.log4j.varia.LevelRangeFilter">-->
+<!--			<param name="LevelMin" value="info" />-->
+<!--			<param name="LevelMax" value="info" />-->
+<!--		</filter>-->
+	</appender>
+
+	<appender name="debugfile"
+		class="org.apache.log4j.RollingFileAppender">
+		<param name="maxFileSize" value="3000KB" />
+		<param name="maxBackupIndex" value="5" />
+		<param name="File" value="${catalina.home}/logs/InvenSense-debug.log" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="%d{DATE} %5p %c{1}:%L - %m%n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="debug" />
+			<param name="LevelMax" value="debug" />
+		</filter>
+	</appender>
+
+	<appender name="warnfile"
+		class="org.apache.log4j.RollingFileAppender">
+		<param name="maxFileSize" value="3000KB" />
+		<param name="maxBackupIndex" value="5" />
+		<param name="File" value="${catalina.home}/logs/InvenSense-warn.log" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="%d{DATE} %5p %c{1}:%L - %m%n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="warn" />
+			<param name="LevelMax" value="warn" />
+		</filter>
+	</appender>
+
+	<appender name="errorfile"
+		class="org.apache.log4j.RollingFileAppender">
+		<param name="maxFileSize" value="3000KB" />
+		<param name="maxBackupIndex" value="5" />
+		<param name="File" value="${catalina.home}/logs/InvenSense-error.log" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="%d{DATE} %5p %c{1}:%L - %m%n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="error" />
+			<param name="LevelMax" value="error" />
+		</filter>
+	</appender>
+
+	<appender name="console"
+		class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="%d{DATE} %5p %c{1}:%L - %m%n" />
+		</layout>
+	</appender>
+
+<!--	<category name="org.apache.commons.httpclient">-->
+<!--		<priority value="debug"/>-->
+<!--		<appender-ref ref="console"/>-->
+<!--	</category>-->
+
+
+	 <logger name="org.apache.commons.httpclient">
+	    	<level value="error"/> 
+		    <appender-ref ref="infofile" />
+  	 </logger>
+  	 <logger name="httpclient.wire">
+		<level value="debug"/>
+		<appender-ref ref="infofile" />
+	</logger>
+	 <logger name="com.serene.crmod">
+	    	<level value="error"/> 
+		    <appender-ref ref="infofile" />
+  	 </logger>
+  	 <logger name="com.serene.crmod.exception">
+		<level value="debug"/>
+		<appender-ref ref="infofile" />
+	</logger>
+
+	
+  	 <logger name="com.invensense">
+		<level value="debug"/>
+		<appender-ref ref="infofile" />
+	</logger>	
+
+  	<logger name="org.hibernate">
+		<level value="error"/>
+		<appender-ref ref="infofile" />
+		<appender-ref ref="errorfile" />
+	</logger>	
+  	<logger name="org.springframework">
+		<level value="error"/>
+		<appender-ref ref="infofile" />
+	</logger>	
+	
+	<root>
+			<appender-ref ref="errorfile" />
+		<priority value="error" />
+<!--			<appender-ref ref="file" />-->
+<!--			<appender-ref ref="infofile" />-->
+<!--			<appender-ref ref="debugfile" />-->
+<!--			<appender-ref ref="warnfile" />-->
+<!--			<appender-ref ref="errorfile" />-->
+			<appender-ref ref="console" />
+	</root>
+</log4j:configuration>

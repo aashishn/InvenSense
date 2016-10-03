@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="InvenSense" default="create-war" basedir=".">
+	<!-- ===================================== -->
+	<!--         Global properties             -->
+	<!-- ===================================== -->	
+	<property name="dir.deploy" location="${basedir}/deploy"/>
+	<property name="dir.dist"  location="${basedir}/dist"/>
+	<property name="dir.classes"  location="${dir.deploy}/classes"/>	
+    <property name="dir.src"  location="${basedir}/src"/>
+	<property name="dir.src.java"  location="${dir.src}"/>    
+	<property name="dir.src.webapp"  location="${basedir}/WebContent"/>
+	<property name="dir.lib"  location="${dir.src.webapp}/WEB-INF/lib"/>
+	
+	<property name="dir.data-files"  location="${basedir}/seed-data"/>
+	<property name="deploy.war.rel-file" value="${dir.dist}/${ant.project.name}.war" />
+	<property file="${basedir}/build.properties" />
+
+	<!-- Classpath -->		
+	<path id="project.classpath">
+		<fileset dir="${dir.lib}">		  
+		  <include name="**/*.jar"/>		  	  
+		</fileset>
+		<pathelement location="${dir.classes}"/>
+	</path>
+	<target name="clean">
+		<delete dir="${dir.deploy}" />
+		<delete dir="${dir.dist}" />
+		<echo message = "Finished Clean..." />
+	</target>	
+	
+	<!-- Creates Required Folder Structure -->
+	<target name="init">
+		<mkdir dir="${dir.deploy}"/>
+		<mkdir dir="${dir.classes}"/>
+		<mkdir dir="${dir.dist}" />
+		<echo message = "Finished Init..." />
+	</target>
+	
+	
+	<!-- Compiles the .java files -->	
+	<target name="compile" depends="init">		
+		<javac debug="true" destdir="${dir.classes}" deprecation="on" classpathref="project.classpath">
+			<src path="${dir.src.java}" />
+		</javac>
+		<echo message="Finished Compile ..."/>
+	</target>
+	
+	<target name="substitute-values" description="substitute values for symbolic names in template files">	    
+	    <copy file="${jdbc}.properties" tofile="${dir.classes}/META-INF/spring/jdbc.properties" overwrite="true">
+	    </copy>
+	</target>
+
+	<target name="check-env">
+		<available file="${jdbc}.properties" property="${database.url}" />
+		<echo>Usage : ant -Djdbc=[pathToFilename]</echo>
+		<fail unless="${database.url}" message="Build unsuccessful since jdbc properties file does not exist or database parameters are incorrect?" />
+	</target>
+
+	<!--  create war file-->
+	<target name="create-war" depends="check-env,compile,substitute-values">
+	    <copy file="${basedir}/resources/log4j.xml" tofile="${dir.classes}/log4j.xml" overwrite="true">
+	    	<filterchain>
+	    		<replacestring from="{appname}" to="${ant.project.name}" />
+	        </filterchain>
+	    </copy>
+
+		<!-- description="Create Web application ARchive" -->
+        <war  destfile="${deploy.war.rel-file}">
+            <!-- web content -->
+
+            <zipfileset dir="${dir.src.webapp}"
+                        includes="**/*" excludes="**/classes/**/*"  />
+            <!-- compiled classes and resource files -->
+        	<zipfileset dir="${dir.src}"
+        	                        includes="**/*.properties,**/*.xml"
+        	                        prefix="WEB-INF/classes" >
+        		<exclude name="log4j.xml" />
+        	</zipfileset>
+            <zipfileset dir="${dir.classes}"
+                        includes="**/*.class,**/*.properties,**/*.xml"
+                        prefix="WEB-INF/classes">
+            </zipfileset>
+            <zipfileset dir="${basedir}/resources"
+                        includes="**/*.*"
+                        prefix="WEB-INF/classes">
+            	<exclude name="log4j.xml" />
+            	<exclude name="${basedir}/resources/spring/jdbc.properties" />
+            </zipfileset>
+        </war>
+    </target>
+
+	<!-- Copies WAR to the specfied directory -->
+	<!--
+	<target name="deploy-war" depends="create-war">		
+		<copy todir="${deploy.dir}" file="${deploy.war.rel-file}" />
+		<echo message="Finished Deploy ..."/>
+	</target>
+	-->
+	
+	<!-- Create a new Project -->
+	
+	<target name="name-location-check">	
+		<condition property="not-empty-name">
+		<and>
+			<not>
+				<equals arg1="${clone.project.location}" arg2="" trim="true"/>
+			</not>
+			<not>
+				<equals arg1="${clone.project.name}" arg2="" trim="true"/>
+			</not>
+		</and>	
+		</condition>
+	</target>
+	
+
+	
+	<target name="abort-clone" depends="name-location-check" unless="not-empty-name">
+		<fail>${line.separator} Project Creation Aborted. Both Project Name and Project Location are required.</fail>
+	</target>
+	
+	
+	<target name="init-clone" depends="name-location-check" if="not-empty-name">
+	        <echo message = "Creating a new Project [${clone.project.name}].. " />
+		<input message="Are you sure you would like to create a new project named [${clone.project.name}]? "
+    			validargs="y,n"
+    			addproperty="project.create"
+  		 />
+  		<condition property="do.abort">
+    			<equals arg1="n" arg2="${project.create}"/>
+  		</condition>
+  		
+  		<fail if="do.abort">${line.separator} Project Creation Aborted. Please verify the clone entries in build.properties</fail>		
+  		
+		<input message="Confirm if project location must be [${clone.project.location}]? "
+    			validargs="y,n"
+    			addproperty="project.location"
+  		 />
+  		<condition property="do.abort">
+    			<equals arg1="n" arg2="${project.location}"/>
+  		</condition>
+  		<fail if="do.abort">${line.separator} Project Cloning Aborted. Please verify the clone entries in build.properties</fail>
+
+		<mkdir dir="${clone.project.location}/${clone.project.name}"/>
+  		
+	</target>
+
+
+	<target name="project-copy" depends="init-clone,abort-clone">
+	  <copydir src="${basedir}"
+	           dest="${clone.project.location}/${clone.project.name}"
+	           includes="**/*.*"
+	           excludes="**/*.svn"
+	  />	
+	</target>	
+	
+   	<target name="project-clone" depends="project-copy">
+   		<propertyfile file="${clone.project.location}/${clone.project.name}/build.properties">
+   			<entry key="clone.project.name" value=""/>
+   			<entry key="clone.project.location" value=""/>
+   			<entry key="deploy.dir" value=""/>
+   	 	</propertyfile>
+   	 	
+		<replaceregexp file="${clone.project.location}/${clone.project.name}/.project"
+		               match="${ant.project.name}"
+		               replace="${clone.project.name}"
+		               byline="true"
+		/>   
+		
+		<replaceregexp file="${clone.project.location}/${clone.project.name}/build.xml"
+		               match="${ant.project.name}"
+		               replace="${clone.project.name}"
+		               byline="true"
+		/>  
+
+		<replaceregexp file="${clone.project.location}/${clone.project.name}/resources/log4j.xml"
+		               match="${ant.project.name}"
+		               replace="${clone.project.name}"
+		               byline="true"
+		/>  
+		
+		<input
+		    message="${line.separator} New Project has been created successfully. Press Return key to continue..."/>
+	</target>
+	
+	
+	<!-- Copies WAR to the specfied directory -->	
+	<target name="deploy-war" depends="create-war, clean-tomcat">		
+		<copy todir="${deploy.dir}" file="${deploy.war.rel-file}" />
+		<echo message="Finished Deploy ..."/>
+	</target>
+	
+	<!-- Clean Tomcat -->
+	<target name="clean-tomcat">
+		<delete dir="${deploy.dir}/${ant.project.name}" />
+		<delete file="${deploy.dir}/${ant.project.name}.war" />
+		<delete dir="${deploy.dir}/../work/Catalina" />
+		
+		<delete>
+			<fileset dir="${deploy.dir}/../logs">		  
+				<include name="**/*.*"/>		  	  
+			</fileset>
+		</delete>
+		
+		<delete dir="${deploy.dir}/../conf/Catalina" />
+	</target>
+	
+</project>

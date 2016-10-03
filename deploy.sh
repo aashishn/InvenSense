@@ -1,0 +1,1 @@
+ant -Djdbc=jdbc deploy-war

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="MoodMedia_Integration" default="generateStubs1" basedir="../">
+	<property name="jaxws.home" value="C:\Program Files\Java\jdk1.7.0_79" />
+	<!-- 	<property name="axislib" value="${basedir}/lib" />
+	<property name="wsdldir" value="${basedir}/wsdl" />
+	<path id="axiscp">
+		<fileset dir="${axislib}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path> -->
+	<target name="generateStubs1" depends="ws1"/>
+	<!--<target name="wsimport">-->
+	<target name="ws1">
+		<!--SalesParty stubs -->
+		<!--<exec executable="${jaxws.home}/bin/wsimport">
+		<arg line="-extension -s ./src -p com.osc.ws.stubs.salesparty https://cagp-test.crm.us2.oraclecloud.com/crmCommonSalesParties/SalesPartyService?WSDL"/>
+		</exec>-->
+		
+<!-- 		<exec executable="${jaxws.home}/bin/wsimport"> -->
+<!-- 		<arg line="-extension -s ./src -p com.osc.ws.test.stubs.salesparty https://crm-aufsn4x0faa.oracleoutsourcing.com/crmCommonSalesParties/SalesPartyService?wsdl"/> -->
+<!-- 		</exec> -->
+		
+	
+		
+		<exec executable="${jaxws.home}/bin/wsimport">
+				<arg line="-extension -s ./src -p com.invensense.ws.fusion.stubs.userdetails -d ./build/classes https://eeal-test.hcm.us2.oraclecloud.com:443/hcmPeopleRolesV2/UserDetailsService?wsdl"/>
+		    </exec> 
+
+	
+		
+	</target>
+
+</project>

@@ -1,0 +1,194 @@
+@CHARSET "ISO-8859-1";
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background: #fff;
+	font: 300 13px Arial, sans-serif;
+	line-height: 1.5; /* Safari 2.0.4 */
+	color: #333;
+}
+
+.dialogbox {
+	z-index: 1200;
+	position: absolute;
+	top: 100px;
+	left: 0;
+	width: 400px;
+	min-height: 100px;
+	_height: 100px;
+}
+
+.dialogbox h3 {
+	padding: 0;
+}
+
+.dialogbox .mHeader,.dialogbox .mFooter,.dialogbox .mContent {
+	width: 100%;
+	position: relative;
+}
+
+.dialogbox .mHeader .mL,.dialogbox .mHeader .mM,.dialogbox .mHeader .mR,.dialogbox .mFooter .mL,.dialogbox .mFooter .mM,.dialogbox .mFooter .mR
+	{
+	background-image: url(images/shade.png);
+	_background-image: url(images/shade.gif);
+}
+
+.dialogbox .mHeader .mL,.dialogbox .mHeader .mR,.dialogbox .mFooter .mL,.dialogbox .mFooter .mR
+	{
+	width: 34px;
+	height: 34px;
+	overflow: hidden;
+	line-height: 0;
+	font-size: 0;
+}
+
+.dialogbox .mHeader .mL {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.dialogbox .mHeader .mR {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+.dialogbox .mFooter .mL {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+}
+
+.dialogbox .mFooter .mR {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+}
+
+.dialogbox .mContent .mL {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.dialogbox .mContent .mR {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+.dialogbox .mHeader .mM,.dialogbox .mFooter .mM {
+	margin: 0 34px;
+}
+
+.dialogbox .mHeader .mM {
+	background-position: 0 -68px;
+	background-repeat: repeat-x;
+	min-height: 34px;
+	height: auto !important;
+	height: 34px;
+}
+
+.dialogbox .mFooter .mM {
+	background-position: 0 -102px;
+	background-repeat: repeat-x;
+	min-height: 34px;
+	height: auto !important;
+	height: 34px;
+}
+
+.mContent .mL,.mContent .mR {
+	background: url(images/shade_y.png) repeat-y;
+	_background: none;
+	width: 17px;
+	height: 100%;
+}
+
+.mContent .mL {
+	background-position: 0 0;
+}
+
+.mContent .mR {
+	background-position: top right;
+}
+
+.dialogbox .mHeader .mL {
+	background-position: 0 0;
+}
+
+.dialogbox .mHeader .mR {
+	background-position: top right;
+}
+
+.dialogbox .mFooter .mL {
+	background-position: 0 -34px;
+}
+
+.dialogbox .mFooter .mR {
+	background-position: -34px -34px;
+}
+
+.dialogboxContentHolder {
+	padding: 0 17px;
+}
+
+.dialogboxContent {
+	background: #E8E8E8 url(images/shade.png) repeat-x 0 -170px;
+	_background: #EAEAEA;
+	zoom: 1;
+	padding: 0 17px;
+}
+
+#contentHolder {
+	-moz-border-radius: 4px 4px 4px 4px;
+	background: none repeat scroll 0 0 #F2F2F2;
+	border: 1px solid #C3C3C3;
+}
+
+#contentHolder p {
+	padding: 5px 10px;
+}
+
+/*
+			dialogbox close
+		*/
+.dialogboxClose,.dialogboxClose span {
+	width: 34px;
+	height: 34px;
+	display: block;
+	cursor: pointer;
+	text-indent: -9000px;
+	border: none;
+}
+
+.dialogboxClose {
+	background: url(images/shade.png) no-repeat -34px -136px;
+	_background: url(images/shade.gif) no-repeat -34px -136px;
+}
+
+.dialogboxClose:link span,.dialogboxClose:visited span {
+	background: url(images/shade.png) no-repeat 0 -136px;
+	_background: url(images/shade.gif) no-repeat 0 -136px;
+	-webkit-transition-duration: .3s;
+	-moz-transition-duration: .3s;
+	/* @inc opacity */
+	opacity: 1; /* Standard: FF gt 1.5, Opera, Safari */
+	filter: alpha(opacity = 100); /* IE lt 8 */
+	-ms-filter: "alpha(opacity=100)"; /* IE 8 */
+	-khtml-opacity: 1; /* Safari 1.x */
+	-moz-opacity: 1; /* FF lt 1.5, Netscape */
+}
+
+.dialogboxClose:hover span,.dialogboxClose:active span,.dialogboxClose:focus span
+	{ /* @inc opacity */
+	opacity: 0; /* Standard: FF gt 1.5, Opera, Safari */
+	filter: alpha(opacity = 0); /* IE lt 8 */
+	-ms-filter: "alpha(opacity=0)"; /* IE 8 */
+	-khtml-opacity: 0; /* Safari 1.x */
+	-moz-opacity: 0; /* FF lt 1.5, Netscape */
+}

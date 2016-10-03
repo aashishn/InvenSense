@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:encryption="http://www.jasypt.org/schema/encryption"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.jasypt.org/schema/encryption
+ 		http://www.jasypt.org/schema/encryption/jasypt-spring31-encryption-1.xsd"
+		default-autowire="byName">
+	<!-- This will automatically locate any and all property files you have 
+		within your classpath, provided they fall under the META-INF/spring directory. 
+		The located property files are parsed and their values can then be used within 
+		application context files in the form of ${propertyKey}. -->
+<!-- 		<context:property-placeholder location="classpath*:META-INF/spring/*.properties"/> -->
+	
+		<encryption:digester-config id="dConf" algorithm="PBEWithMD5AndDES" />
+   		<encryption:string-digester config-bean="dConf"/>
+   		<encryption:encryptor-config id="eConf" password="crmod" algorithm="PBEWithMD5AndDES"/> 
+		<encryption:string-encryptor id="stringEnc" config-bean="eConf"/>  
+		<encryption:encryptable-property-placeholder encryptor="stringEnc" location="classpath*:META-INF/spring/*.properties"/>
+		
+	<!-- This declaration will cause Spring to locate every @Component, @Repository 
+		and @Service in your application. In practical terms this allows you to write 
+		a POJO and then simply annotate the new POJO as an @Service and Spring will 
+		automatically detect, instantiate and dependency inject your service at startup 
+		time. Importantly, you can then also have your new service injected into 
+		any other class that requires it simply by declaring a field for your service 
+		inside the relying class and Spring will inject it. Note that two exclude 
+		filters are declared. The first ensures that Spring doesn't spend time introspecting 
+		Roo-specific ITD aspects. The second ensures Roo doesn't instantiate your 
+		@Controller classes, as these should be instantiated by a web tier application 
+		context. Refer to web.xml for more details about the web tier application 
+		context setup services. Furthermore, this turns on @Autowired, @PostConstruct 
+		etc support. These annotations allow you to use common Spring and Java Enterprise 
+		Edition annotations in your classes without needing to do any special configuration. 
+		The most commonly used annotation is @Autowired, which instructs Spring to 
+		dependency inject an object into your class. -->
+	<context:component-scan base-package="com.invensense" />
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	<bean class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close" id="dataSource">
+		<property name="driverClassName" value="${database.driverClassName}" />
+		<property name="url" value="${database.url}" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+		<property name="testOnBorrow" value="true" />
+		<property name="testOnReturn" value="true" />
+		<property name="testWhileIdle" value="true" />
+		<property name="timeBetweenEvictionRunsMillis" value="1800000" />
+		<property name="numTestsPerEvictionRun" value="3" />
+		<property name="minEvictableIdleTimeMillis" value="1800000" />
+	</bean>
+	<bean class="org.springframework.orm.jpa.JpaTransactionManager"
+		id="transactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+	<bean
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+		id="entityManagerFactory">
+		<property name="persistenceUnitName" value="persistenceUnit" />
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<bean class="org.springframework.web.servlet.view.ResourceBundleViewResolver"
+		id="viewResolver">
+		<property name="basename" value="views" />
+	</bean>
+
+   <bean id="integrationEventProcessorMap" name="integrationEventProcessorMap" class="com.invensense.util.IntegrationEventProcessorMap">
+     	<property name="eventProcessorMap">
+         	<map>
+				<entry key="QLI: IQ update on status modification" value="com.invensense.intergration.event.QuoteLineItemStatusUpdateEventProcessor"></entry>
+				<entry key="QLI: IQ on Quote Line Item Creation n Field Update" value="com.invensense.intergration.event.QuoteLineItemStatusUpdateEventProcessor"></entry>
+				<entry key="IQ for Primary Part Number" value="com.invensense.intergration.event.OpportunityProductRevenueUpdateEventProcessor"></entry>
+				<entry key="IQ for Primary Part Number nrs" value="com.invensense.intergration.event.OpportunityProductRevenueUpdateEventProcessor"></entry>
+				<entry key="Account Team Creation Build Relationships" value="com.invensense.intergration.event.AccountTeamUpdateEventProcessor"></entry>
+				<entry key="Quote Creation Build Relationships" value="com.invensense.intergration.event.QuoteTeamCreateEventProcessor"></entry>
+				<entry key="Quote Modification Build Relationships" value="com.invensense.intergration.event.QuoteTeamUpdateEventProcessor"></entry>
+				<entry key="QLI Creation Build Relationships" value="com.invensense.intergration.event.QuoteLineItemCreateTeamEventProcessor"></entry>
+				<entry key="QLI Modification Build Relationships" value="com.invensense.intergration.event.QuoteLineItemUpdateTeamEventProcessor"></entry>
+				
+				<!-- OJDM - Opportunity Team base on Market and Submarket -->
+				<entry key="Opty BU Mgr Assignment wmrs" value="com.invensense.intergration.event.OpportunityTeamUpdateEventProcessor"></entry>
+				<entry key="Opty BU Mgr Assignment nrs" value="com.invensense.intergration.event.OpportunityTeamUpdateEventProcessor"></entry>
+				
+				<!-- OJDM - QLI Update, Add Product BU Manager based on Market segment update -->
+				<entry key="QLI Market Segment BU Mgr Assign mrs" value="com.invensense.intergration.event.AddProductBUManagerInQLITeamEventProcessor"></entry>
+				
+				<!-- <entry key="QLI: BU Mgr Assignment wmrs" value="com.invensense.intergration.event.AddProductBUManagerInQLITeamEventProcessor"></entry>
+					<entry key="QLI: BU Mgr Assignment nrs" value="com.invensense.intergration.event.AddProductBUManagerInQLITeamEventProcessor"></entry>   -->
+      		</map>
+  		</property>
+  		<property name="eventErrorProcessorMap">
+         	<map>
+      		</map>
+  		</property>
+	</bean>
+	
+   <bean id="financeForecastSyncProcessorMap" name="financeForecastSyncProcessorMap" class="com.invensense.util.FinanceForecastSyncProcessorMap">
+     	<property name="financeSyncProcessorMap">
+         	<map>
+				<entry key="April" value="com.invensense.sync.impl.SyncFinanceForecastPostApril"></entry>
+				<entry key="May" value="com.invensense.sync.impl.SyncFinanceForecastPostMay"></entry>
+				<entry key="June" value="com.invensense.sync.impl.SyncFinanceForecastPostJune"></entry>
+				<entry key="July" value="com.invensense.sync.impl.SyncFinanceForecastPostJuly"></entry>
+				<entry key="August" value="com.invensense.sync.impl.SyncFinanceForecastPostAugust"></entry>
+				<entry key="September" value="com.invensense.sync.impl.SyncFinanceForecastPostSeptember"></entry>
+				<entry key="October" value="com.invensense.sync.impl.SyncFinanceForecastPostOctober"></entry>
+				<entry key="November" value="com.invensense.sync.impl.SyncFinanceForecastPostNovember"></entry>
+				<entry key="December" value="com.invensense.sync.impl.SyncFinanceForecastPostDecember"></entry>
+				<entry key="January" value="com.invensense.sync.impl.SyncFinanceForecastPostJanuary"></entry>
+				<entry key="February" value="com.invensense.sync.impl.SyncFinanceForecastPostFebruary"></entry>
+      		</map>
+  		</property>
+	</bean>
+   
+</beans>

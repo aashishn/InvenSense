@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+	"-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
+	"http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+
+<tiles-definitions>
+<!--   <definition name="projectCreatedSuccessfully" extends="default"> -->
+<!--    <put-attribute name="body" value="/WEB-INF/views/assigment/ajaxSuccess.jsp" /> -->
+<!--   </definition> -->
+  
+  <definition name="sync_status" extends="default">
+   <put-attribute name="body" value="/WEB-INF/views/sync_status/SyncStatus.jsp" />
+  </definition>
+  
+  <definition name="sync_job" extends="default">
+   <put-attribute name="body" value="/WEB-INF/views/sync_status/SyncJob.jsp" />
+  </definition>
+    
+<!--   <definition name="goToProjectCreationProcess" extends="ajax_template"> -->
+<!--    <put-attribute name="body" value="/WEB-INF/views/assigment/AssignmentToProject.jsp" /> -->
+<!--   </definition> -->
+</tiles-definitions>

@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_1_0.xsd" version="1.0">
+	
+	<named-query name="UNPROCESSED_EVENTS">
+		<query>
+			<![CDATA[
+				select o from com.invensense.model.EventObject o  where processed is null or (processed= false and retryCount < 3)
+			]]> 
+		</query>	
+	</named-query>	
+ 	
+ 	<named-query name="SYNC_JOB_QUERY"> 
+ 		<query> 
+ 			<![CDATA[ 
+ 				     select o from com.invensense.model.Job o
+ 			]]> 
+ 		</query> 
+ 	</named-query>	
+	
+	<named-query name="GET_FORECAST_BY_COMPOSITE_KEY">
+		<query>
+			<![CDATA[
+				select o from com.invensense.model.ForeCast o  where endCustomerId = ? and productId = ? and year = ? and market = ? and subMarket = ? and programName = ? and businessUnit = ? 
+			]]> 
+		</query>	
+	</named-query>
+	
+	<named-query name="GET_FORECAST_BY_KEY_TO_DELETE">
+		<query>
+			<![CDATA[
+				select o from com.invensense.model.ForeCast o  where endCustomerId = ? and market = ? and subMarket = ? and programName = ? and businessUnit = ? and productId = ? and year = ?
+			]]> 
+		</query>	
+	</named-query>
+	
+	<named-query name="UNPROCESSED_STAGING_FORECAST">
+		<query>
+			<![CDATA[
+				select o from com.invensense.model.ForeCast o  where syncStep is null and syncStatus is null OR 
+				(syncStep = 'DB_CRMOD' and syncStatus = 'FAILED' and retryCount < 3)
+			]]> 
+		</query>	
+	</named-query>
+	
+	<named-query name="UNPROCESSED_STAGING_FORECAST_HISTORY">
+		<query>
+			<![CDATA[
+				select o from com.invensense.model.ForeCastHistory o  where syncStep is null and syncStatus is null OR 
+				(syncStep = 'DB_CRMOD' and syncStatus = 'FAILED' and retryCount < 3)
+			]]> 
+		</query>	
+	</named-query>
+	
+	<named-query name="UNPROCESSED_STAGING_FINANCE_FORECAST_HISTORY">
+		<query>
+			<![CDATA[
+				select o from com.invensense.model.FinanceForeCastHistory o  where syncStep is null and syncStatus is null OR 
+				(syncStep = 'DB_CRMOD' and syncStatus = 'FAILED' and retryCount < 3)
+			]]> 
+		</query>	
+	</named-query>
+ 	
+ 	<named-query name="IsViewForecast">
+  		<query>  
+  			<![CDATA[  
+  				select enabled from com.invensense.model.User o where id = ?
+  			]]> 
+  		</query>
+  	</named-query> 
+  	  	  	
+  	<named-query name="GetSalesRepForManager">
+  		<query>  
+  			<![CDATA[  
+  				select o from com.invensense.model.User o where reportsTo = ?
+  			]]> 
+  		</query>
+  	</named-query>
+  	  	
+  	<named-query name="GET_USER_BY_USER_NAME">
+  		<query>  
+  			<![CDATA[  
+  				select o from com.invensense.model.User o where id = ?
+  			]]> 
+  		</query>
+  	</named-query>
+  	
+  	<named-query name="GET_USER_BY_USER_SIGN_IN_ID">
+  		<query>  
+  			<![CDATA[  
+  				select o from com.invensense.model.User o where userSignInId = ?
+  			]]> 
+  		</query>
+  	</named-query>
+  	  	
+  	<named-query name="GET_ACCOUNT_NAME_BY_OWNER">
+		<query>
+			<![CDATA[
+				select o from com.invensense.model.Account o  where ownerId = ?
+			]]> 
+		</query>	
+	</named-query>
+	
+	<named-query name="GET_ACCOUNT_BY_ID">
+		<query>
+			<![CDATA[
+				select o from com.invensense.model.Account o  where id = ?
+			]]> 
+		</query>	
+	</named-query>
+	
+		<named-query name="GET_PRODUCT_BY_ID">
+		<query>
+			<![CDATA[
+				select o from com.invensense.model.Product o  where id = ?
+			]]> 
+		</query>	
+	</named-query>
+	
+	<named-query name="GET_PRODUCTS">
+		<query>
+			<![CDATA[
+				select o from com.invensense.model.Product o
+			]]> 
+		</query>	
+	</named-query>
+	
+	<named-query name="GET_MARKET_SEGMENT_PICKLIST">
+		<query>
+			<![CDATA[
+				select o from com.invensense.model.PicklistLookup o where lookupName = 'MARKET_SEGMENT'
+			]]> 
+		</query>	
+	</named-query>
+	
+	<named-query name="GET_SUB_SEGMENT_PICKLIST">
+		<query>
+			<![CDATA[
+				select o from com.invensense.model.PicklistLookup o where lookupName = 'SUB_SEGMENT'
+			]]> 
+		</query>	
+	</named-query>
+	
+	<named-query name="GET_BUSINESS_UNIT_PICKLIST">
+		<query>
+			<![CDATA[
+				select o from com.invensense.model.PicklistLookup o where lookupName = 'BU'
+			]]> 
+		</query>	
+	</named-query>
+	
+	<named-query name="GET_SUB_SEGMENT_PICKLIST_BY_MARKET">
+		<query>
+			<![CDATA[
+				select o from com.invensense.model.PicklistLookup o where parentLookupName = 'MARKET_SEGMENT' and parentLookupValue = ?
+			]]> 
+		</query>	
+	</named-query>
+	
+	<named-query name="GET_TOTAL_CUSTOMERS_FOR_FORECAST">
+		<query>
+			<![CDATA[
+				select count(DISTINCT parentEndCustomer) from com.invensense.model.ForeCast o  where year=? AND salesRepId=? AND parentEndCustomer LIKE ? AND market LIKE ? 
+				AND subMarket LIKE ? AND programName LIKE ? AND businessUnit LIKE ? AND productName LIKE ?
+			]]> 
+		</query>	
+	</named-query>
+	
+	<named-query name="GET_LOCKED_FORECAST_LOCKING_INFO_BY_YEAR">
+		<query>
+			<![CDATA[
+				select o from com.invensense.model.SalesForecastLockInfo o where year = ? AND locked = true and forecastType = ?
+			]]> 
+		</query>	
+	</named-query>
+	
+	<named-query name="GET_SALES_FORECAST_LOCK_BY_COMPOSITE_KEY">
+		<query>
+			<![CDATA[
+				select o from com.invensense.model.SalesForecastLockInfo o  where month = ? AND year = ? AND locked = true and forecastType= ?
+			]]> 
+		</query>	
+	</named-query>
+	
+	<named-query name="GET_FORECAST_OF_CURRENT_AND_NEXT_FISCAL_YEAR">
+		<query>
+			<![CDATA[
+				select o from com.invensense.model.ForeCast o  where year = ? OR year = ?
+			]]> 
+		</query>	
+	</named-query>
+	
+	<named-query name="GET_FINANCE_FORECAST_OF_CURRENT_AND_NEXT_FISCAL_YEAR">
+		<query>
+			<![CDATA[
+				select o from com.invensense.model.FinanceForeCast o  where ( year = ? OR year = ? ) and month != 'NA'
+			]]> 
+		</query>	
+	</named-query>
+	
+	<named-query name="GET_FORECAST_HISTORY_BY_COMPOSITE_KEY">
+		<query>
+			<![CDATA[
+				select o from com.invensense.model.ForeCastHistory o  where forecastId = ? and lockedMonth = ? and lockedYear = ?
+			]]> 
+		</query>	
+	</named-query>
+	
+	<named-query name="GET_FINANCE_FORECAST_HISTORY_BY_COMPOSITE_KEY">
+		<query>
+			<![CDATA[
+				select o from com.invensense.model.FinanceForeCastHistory o  where forecastId = ? and lockedMonth = ? and lockedYear = ?
+			]]> 
+		</query>	
+	</named-query>
+	
+	<named-query name="GET_USER_BY_ROW_ID">
+		<query>
+			<![CDATA[
+				select o from com.invensense.model.User o  where id = ? 
+			]]> 
+		</query>	
+	</named-query>
+	
+	<named-query name="GET_PARENT_ACCOUNTS_BY_OWNER">
+		<query>
+			<![CDATA[
+				select o from com.invensense.model.Account o  where ownerId = ? and id in (select distinct parentAccountId from com.invensense.model.Account o)
+			]]> 
+		</query>	
+	</named-query>
+	
+	<named-query name="GET_FORECAST_OF_OWNER_BY_FISCAL_YEAR">
+		<query>
+			<![CDATA[
+				select o from com.invensense.model.ForeCast o where salesRepId = ? and year = ? and (closed = false OR closed is null)
+			]]> 
+		</query>	
+	</named-query>
+	
+	<named-query name="GET_FINANCE_FORECAST_BY_COMPOSITE_KEY">
+		<query>
+			<![CDATA[
+				select o from com.invensense.model.FinanceForeCast o  where endCustomerId = ? and productId = ? and year = ? and market = ? and subMarket = ? and programName = ? and businessUnit = ? and month != 'NA'
+			]]> 
+		</query>	
+	</named-query>
+  	 
+  	<named-query name="GET_FINANCE_FORECAST_EXIST_BY_COMPOSITE_KEY">
+		<query>
+			<![CDATA[
+				select o from com.invensense.model.FinanceForecastExist o where year = ? and month = ?
+			]]> 
+		</query>	
+	</named-query>
+	
+  	<named-query name="GET_LAST_COPIED_TIMESTAMP">
+		<query>
+			<![CDATA[
+				select o from com.invensense.model.LastCopiedTimestamp o where forecastType = ?
+			]]> 
+		</query>	
+	</named-query>
+	
+  	<named-query name="GET_SALES_FORECAST_BY_LAST_MODIFIED_DATE">
+		<query>
+			<![CDATA[
+				select o from com.invensense.model.ForeCast o where modifiedDate > ? 
+			]]> 
+		</query>	
+	</named-query>
+	
+  	<named-query name="GET_ALL_SALES_FORECAST">
+		<query>
+			<![CDATA[
+				select o from com.invensense.model.ForeCast o
+			]]> 
+		</query>	
+	</named-query>
+	
+  	<named-query name="GET_FINANCE_FORECAST_EXIST_NOT_LOCKED">
+		<query>
+			<![CDATA[
+				select o from com.invensense.model.FinanceForecastExist o where recordExist = 1 and locked = 0
+			]]> 
+		</query>	
+	</named-query>
+	
+  	<named-query name="GET_INVISIBLE_FINANCE_FORECAST_BY_COMPOSITE_KEY">
+		<query>
+			<![CDATA[
+				select o from com.invensense.model.FinanceForeCast o  where endCustomerId = ? and productId = ? and year = ? and market = ? and subMarket = ? and programName = ? and businessUnit = ? and month = 'NA'
+			]]> 
+		</query>	
+	</named-query>
+	
+  	<named-query name="GET_FINANCE_FORECAST_EXIST_BY_MONTH_SEQUENCE">
+		<query>
+			<![CDATA[
+				select o from com.invensense.model.FinanceForecastExist o where monthSequence = ?
+			]]> 
+		</query>	
+	</named-query>
+	
+  	<named-query name="GET_INVENSENSE_PROPERTY_BY_NAME">
+		<query>
+			<![CDATA[
+				select o from com.invensense.model.InvensenseProperty o where name = ?
+			]]> 
+		</query>	
+	</named-query>
+	
+  	<named-query name="GET_FORECAST_LOCK_BY_MONTH_SEQUENCE">
+		<query>
+			<![CDATA[
+				select o from com.invensense.model.SalesForecastLockInfo o where monthSequence = ? and year = ? and forecastType = ?
+			]]> 
+		</query>	
+	</named-query>
+	
+  	<named-query name="GET_IMMEDIATE_REPORTEE_USERS">
+		<query>
+			<![CDATA[
+				select o from com.invensense.model.User o where reportsTo = ?
+			]]> 
+		</query>	
+	</named-query>
+	
+  	<named-query name="GET_ACCOUNT_TEAM_BY_USER_ID">
+		<query>
+			<![CDATA[
+				select o from com.invensense.model.AccountTeamWS1 o where userId = ?
+			]]> 
+		</query>	
+	</named-query>
+	
+  	<named-query name="CHECK_ACCOUNT_IS_PARENT">
+		<query>
+			<![CDATA[
+				select o from com.invensense.model.Account o  where id = ? and accountType = ?
+			]]> 
+		</query>	
+	</named-query>
+	
+  	<named-query name="GET_FORECAST_BY_CLIENT_DATA">
+		<query>
+			<![CDATA[
+				select o from com.invensense.model.ForeCast o where parentEndCustomerName = ? and partNumber = ? and market = ? 
+															  and subMarket = ? and businessUnit = ? and programName = ? and year = ?
+			]]> 
+		</query>	
+	</named-query>
+	
+  	<named-query name="GET_ALL_FORECAST">
+		<query>
+			<![CDATA[
+				select o from com.invensense.model.ForeCast o 
+			]]> 
+		</query>	
+	</named-query>
+	
+	<named-query name="GET_ALL_ACTIVE_USERS">
+		<query>
+			<![CDATA[
+				select o from com.invensense.model.User o where status = 'Active'
+			]]> 
+		</query>	
+	</named-query>
+	
+</entity-mappings>

@@ -1,0 +1,8 @@
+<html>
+<h1>
+This is template based email notification using velocity 
+</h1>
+<body>
+	The ${jobName} has successfully run
+</body>
+</html>

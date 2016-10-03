@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/task
+    http://www.springframework.org/schema/task/spring-task-3.0.xsd">
+    
+  <!--   <task:scheduler id="invensenseJobs" pool-size="15"/>
+	<task:scheduled-tasks scheduler="invensenseJobs">
+		<task:scheduled  ref="integrationEventSyncJob" method="executeInternal" cron="0/30 * * * * *"   /> Every 30 Seconds
+		<task:scheduled  ref="processedIntegrationEventJob" method="executeInternal" cron="0/45 * * * * *"   />  Every 45 Seconds
+		<task:scheduled  ref="accountSyncJob" method="executeInternal" cron="0 0 22 1/1 * ?"   /> Daily 10 PM
+ 		<task:scheduled  ref="accountTeamSyncJob" method="executeInternal" cron="0 0 0/4 1/1 * ?"   /> Every 4 Hours
+ 		<task:scheduled  ref="userSyncJob" method="executeInternal" cron="0 0 22 1/1 * ?"   /> Daily 10 PM
+ 		<task:scheduled  ref="productSyncJob" method="executeInternal" cron="0 0 22 1/1 * ?"   /> Daily 10 PM
+ 		<task:scheduled  ref="foreCastSyncJob" method="executeInternal" cron="0 0 17 1/1 * ?"   /> Daily 5 PM
+        <task:scheduled  ref="foreCastHistorySyncJob" method="executeInternal" cron="0 0 5 ? * FRI"   /> Weekly on Friday 5 AM
+        <task:scheduled  ref="financeForeCastHistorySyncJob" method="executeInternal" cron="0 0 0/1 1/1 * ?"   /> Every 1 Hour
+	</task:scheduled-tasks>
+	 -->
+<!-- <task:scheduled-tasks scheduler="invensenseJobs"> -->
+<!--		<task:scheduled  ref="integrationEventSyncJob" method="executeInternal" cron="0 0/2 * ? * *"  /> -->  <!-- Every 30 Seconds -->
+<!--		<task:scheduled  ref="processedIntegrationEventJob" method="executeInternal" cron="0 0/3 * ? * *"  /> --> <!--  Every 45 Seconds -->
+<!--		<task:scheduled  ref="accountSyncJob" method="executeInternal" cron="0 0/5 * ? * *"   /> --> <!-- Daily 10 PM -->
+<!--		<task:scheduled  ref="accountTeamSyncJob" method="executeInternal" cron="0 0/13 * ? * *"   /> --> <!-- Every 4 Hours -->
+<!--		<task:scheduled  ref="userSyncJob" method="executeInternal" cron="0 0/7 * ? * *"   />  --> <!-- Daily 10 PM -->
+<!--		<task:scheduled  ref="productSyncJob" method="executeInternal" cron="0 0/6 * ? * *"   /> -->  <!-- Daily 10 PM -->
+<!--		<task:scheduled  ref="foreCastSyncJob" method="executeInternal" cron="0 0/4 * ? * *"   /> -->  <!-- Daily 5 PM -->
+<!--    <task:scheduled  ref="foreCastHistorySyncJob" method="executeInternal" cron="0 0/5 * ? * *"   /> --> <!-- Weekly on Friday 5 AM -->
+<!--        <task:scheduled  ref="financeForeCastHistorySyncJob" method="executeInternal" cron="0 0/6 * ? * *"   /> --> <!-- Every 1 Hour -->
+<!--	</task:scheduled-tasks> -->
+</beans>
