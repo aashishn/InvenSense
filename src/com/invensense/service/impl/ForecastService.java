@@ -369,7 +369,7 @@ public class ForecastService {
 
 	private ForeCastHistory getForeCastHistory(ForeCast foreCast, String month, String salesRepId) {
 		ForeCastHistory foreCastHistory = new ForeCastHistory();
-		foreCastHistory.setName(foreCast.getRowId() + "-" + month + "-" + foreCast.getYear());
+		//foreCastHistory.setName(foreCast.getRowId() + "-" + month + "-" + foreCast.getYear());
 		foreCastHistory.setForecastId(foreCast.getRowId());
 		foreCastHistory.setYear(foreCast.getYear());
 		foreCastHistory.setRevenue(foreCast.getRevenue());
@@ -419,6 +419,8 @@ public class ForecastService {
 		foreCastHistory.setQuantity10(foreCast.getQuantity10());
 		foreCastHistory.setQuantity11(foreCast.getQuantity11());
 		foreCastHistory.setQuantity12(foreCast.getQuantity12());
+		foreCastHistory.setCreatedDate(new Date());
+		foreCastHistory.setModifiedDate(new Date());
 		return foreCastHistory;
 	}
 
@@ -470,7 +472,7 @@ public class ForecastService {
 			product=products.get(0);
 		}
 		
-		foreCast.setName(customerId + "-" + product.getProductName() + "-" + fiscalYear);
+		//foreCast.setName(customerId + "-" + product.getProductName() + "-" + fiscalYear);
 		foreCast.setForecastType(Constants.FORECAST_TYPE_SALES_FORECAST);
 		foreCast.setParentEndCustomer(customerId);
 		foreCast.setParentEndCustomerName(account.getName());
@@ -589,6 +591,8 @@ public class ForecastService {
 		financeforeCastHistory.setQuantity10(financeforeCast.getQuantity10());
 		financeforeCastHistory.setQuantity11(financeforeCast.getQuantity11());
 		financeforeCastHistory.setQuantity12(financeforeCast.getQuantity12());
+		financeforeCastHistory.setCreatedDate(new Date());
+		financeforeCastHistory.setModifiedDate(new Date());
 		return financeforeCastHistory;
 	}
 	
