@@ -66,6 +66,9 @@ public class ForecastAction extends BaseAction {
 	@Resource
 	private EntityService entityService ;
 
+	@Resource
+	private SCForecastImpl scForecastImpl ;
+	
 	private int rowId;
 
 	public EntityService getEntityService() {
@@ -966,10 +969,13 @@ public class ForecastAction extends BaseAction {
 				//if(StringUtils.isNotBlank(foreCast.getRowId())) {
 					ForeCast deleteForecast = new ForeCast();
 					deleteForecast.setRowId(foreCast.getRowId());
-					ForecastCustomC forecast_Custom_c = new ForecastCustomC();
-					forecast_Custom_c.setId(new BigDecimal("300000001672487"));
-					SCForecastImpl scForecastImpl = new SCForecastImpl();
-					scForecastImpl.delete(forecast_Custom_c);
+					if(null!=foreCast.getRowId())
+					{
+						ForecastCustomC forecast_Custom_c = new ForecastCustomC();
+						forecast_Custom_c.setId(new BigDecimal(foreCast.getRowId()));
+						scForecastImpl.delete(forecast_Custom_c);
+					}
+					
 					//crmodService.delete(deleteForecast);
 				//}
 			}

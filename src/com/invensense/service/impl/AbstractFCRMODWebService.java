@@ -1,7 +1,9 @@
-/*package com.invensense.service.impl;
+package com.invensense.service.impl;
 
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.ws.BindingProvider;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.invensense.service.FCRMODWebService;
 import com.invensense.util.PropFileUtil;
+import com.invensense.util.SOAPLoggingHandler;
 import com.invensense.ws.fusion.stubs.customObject.SalesCustomObjectService;
 import com.invensense.ws.fusion.stubs.customObject.SalesCustomObjectService_Service;
 import com.sun.xml.internal.ws.client.BindingProviderProperties;
@@ -33,13 +36,11 @@ public abstract class AbstractFCRMODWebService implements FCRMODWebService {
 	     
 	     reqContext.put(BindingProvider.USERNAME_PROPERTY, PropFileUtil.getValue("sc.username"));
 	     reqContext.put(BindingProvider.PASSWORD_PROPERTY, PropFileUtil.getValue("sc.password"));
-	     //2 mins
+	      
 	     reqContext.put(BindingProviderProperties.REQUEST_TIMEOUT, 60000);
-	     //socket connect timeout
+	     
 	     reqContext.put(BindingProviderProperties.CONNECT_TIMEOUT, 60000);
-	    *//**
-	     * This is for SOAP Logging
-	     *//*
+	   
 	     List handlerList = wsbp.getBinding().getHandlerChain();
 		 if (handlerList == null)
 			handlerList = new ArrayList();
@@ -60,4 +61,3 @@ public abstract class AbstractFCRMODWebService implements FCRMODWebService {
 
 		
 }
-*/
