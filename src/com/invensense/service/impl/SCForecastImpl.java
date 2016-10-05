@@ -1,5 +1,9 @@
 package com.invensense.service.impl;
 
+import java.util.Map;
+
+import javax.xml.ws.BindingProvider;
+
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
@@ -8,7 +12,7 @@ import com.invensense.ws.fusion.stubs.customObject.SalesCustomObjectService;
 import com.invensense.ws.fusion.stubs.customObject.SalesCustomObjectService_Service;
 
 @Service
-public class SCForecastImpl extends AbstractFCRMODWebService {
+public class SCForecastImpl {
 
 	private Logger log = Logger.getLogger(SCForecastImpl.class);
 	private SalesCustomObjectService salesCustomObjectService ;
@@ -16,7 +20,11 @@ public class SCForecastImpl extends AbstractFCRMODWebService {
 	{
 		SalesCustomObjectService_Service salesCustomObjectService_Service = new SalesCustomObjectService_Service();
 		this.salesCustomObjectService = salesCustomObjectService_Service.getSalesCustomObjectServiceSoapHttpPort();
-		setWSBindingProvider(salesCustomObjectService,PropFileUtil.getValue("sc.url"));
+		BindingProvider wsbindingProvider = (BindingProvider)salesCustomObjectService;
+		Map<String, Object> requestContext = wsbindingProvider.getRequestContext();
+		String serviceEndPoint = PropFileUtil.getValue("sc.url");//"https://cbax.hcm.us2.oraclecloud.com:443/hcmPeopleRolesV2/UserDetailsService";
+
+		requestContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, serviceEndPoint);    
 	}
 
 	public void delete(Object obj) throws Exception {
