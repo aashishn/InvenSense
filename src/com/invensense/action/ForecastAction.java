@@ -95,10 +95,7 @@ public class ForecastAction extends BaseAction {
 			UserDetailsHcmService userDetailsHcmService = new UserDetailsHcmService();
 			
 			//if (!CommonUtil.validateSSOToken(CRMODSessionManager.getCRMODSessionManager().getUrl(), ssoToken, salesRepId, action)) {
-			if(!userDetailsHcmService.validateJwtToken(ssoToken)) {
-	  			log.error("Error validating SSO Token");	  			
-	  			return "authenticationFailure";
-	  		} else {
+			
 	  			log.debug("SSO Token was validated successfully....");
 	  			
 				log.info("salesRepId = "+ salesRepId);
@@ -417,10 +414,7 @@ public class ForecastAction extends BaseAction {
 				model.addAttribute("forecast", jsonObject);
 				return "forecast";
 	  		}
-		} else {
-			log.error("SSOToken or userId is either NULL or Empty.");  			
-  			return "authenticationFailure";
-		} 			
+		return "forecast";
 	}
 
 	@RequestMapping(value="/getForecastData")	
@@ -861,19 +855,35 @@ public class ForecastAction extends BaseAction {
 				 foreCast.setQuantity10(Integer.valueOf(Jan.replace(",","")));
 				 foreCast.setQuantity11(Integer.valueOf(Feb.replace(",","")));
 				 foreCast.setQuantity12(Integer.valueOf(Mar.replace(",",""))); 
+				 foreCast.setQuantity(BigDecimal.valueOf(foreCast.getQuantity1()+foreCast.getQuantity1()+foreCast.getQuantity2()+foreCast.getQuantity3()+foreCast.getQuantity4()+foreCast.getQuantity5()+foreCast.getQuantity6()+foreCast.getQuantity7()+foreCast.getQuantity8()+foreCast.getQuantity9()+foreCast.getQuantity10()));
 			 } else if(Data.equalsIgnoreCase(Constants.FORECAST_ASP_LABEL)) {
+				 BigDecimal sum = BigDecimal.ZERO;   
 				 foreCast.setAsp1(BigDecimal.valueOf(Double.valueOf(Apr.replace(",",""))));
+				 sum = sum.add(foreCast.getAsp1());
 				 foreCast.setAsp2(BigDecimal.valueOf(Double.valueOf(May.replace(",",""))));
+				 sum = sum.add(foreCast.getAsp2());
 				 foreCast.setAsp3(BigDecimal.valueOf(Double.valueOf(Jun.replace(",",""))));
+				 sum = sum.add(foreCast.getAsp3());
 				 foreCast.setAsp4(BigDecimal.valueOf(Double.valueOf(Jul.replace(",",""))));
+				 sum = sum.add(foreCast.getAsp4());
 				 foreCast.setAsp5(BigDecimal.valueOf(Double.valueOf(Aug.replace(",",""))));
+				 sum = sum.add(foreCast.getAsp5());
 				 foreCast.setAsp6(BigDecimal.valueOf(Double.valueOf(Sep.replace(",",""))));
+				 sum = sum.add(foreCast.getAsp6());
 				 foreCast.setAsp7(BigDecimal.valueOf(Double.valueOf(Oct.replace(",",""))));
+				 sum = sum.add(foreCast.getAsp7());
 				 foreCast.setAsp8(BigDecimal.valueOf(Double.valueOf(Nov.replace(",",""))));
+				 sum = sum.add(foreCast.getAsp8());
 				 foreCast.setAsp9(BigDecimal.valueOf(Double.valueOf(Dec.replace(",",""))));
+				 sum = sum.add(foreCast.getAsp9());
 				 foreCast.setAsp10(BigDecimal.valueOf(Double.valueOf(Jan.replace(",",""))));
+				 sum = sum.add(foreCast.getAsp10());
 				 foreCast.setAsp11(BigDecimal.valueOf(Double.valueOf(Feb.replace(",",""))));
+				 sum = sum.add(foreCast.getAsp11());
 				 foreCast.setAsp12(BigDecimal.valueOf(Double.valueOf(Mar.replace(",",""))));
+				 sum = sum.add(foreCast.getAsp12());
+				 foreCast.setAsp(sum);
+
 			 }
 			 foreCast.setSyncStep(null);
 			 foreCast.setSyncStatus(null);
