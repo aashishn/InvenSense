@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.invensense.util.PropFileUtil;
 import com.invensense.ws.fusion.stubs.customObject.SalesCustomObjectService;
 import com.invensense.ws.fusion.stubs.customObject.SalesCustomObjectService_Service;
+import com.invensense.ws.fusion.stubs.customObject.ServiceException;
 
 @Service
 public class SCForecastImpl {
@@ -24,19 +25,29 @@ public class SCForecastImpl {
 		Map<String, Object> requestContext = wsbindingProvider.getRequestContext();
 		String serviceEndPoint = PropFileUtil.getValue("sc.url");//"https://cbax.hcm.us2.oraclecloud.com:443/hcmPeopleRolesV2/UserDetailsService";
 
-		requestContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, serviceEndPoint);    
+		requestContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, serviceEndPoint);  
+		requestContext.put(BindingProvider.USERNAME_PROPERTY, PropFileUtil.getValue("sc.username"));
+		requestContext.put(BindingProvider.PASSWORD_PROPERTY, PropFileUtil.getValue("sc.password"));
 	}
 
-	public void delete(Object obj) throws Exception {
+	public void delete(final Object obj) throws Exception {
 		try
 		{
-			salesCustomObjectService.deleteEntity(obj, "Forecast_Custom_c");
-			log.info("Forecast Deleted Successfully");
+			new Thread(new Runnable() {
+			    public void run() {
+			    	try {
+						salesCustomObjectService.deleteEntity(obj, "Forecast_Custom_c");
+					} catch (ServiceException e) {
+						log.error("Error occurred while deleting Forecast record from Sales Cloud: " + e);
+					}
+					log.info("Forecast Deleted Successfully");
+			    }
+			}).start();
+			
 		}
 		catch(Exception e)
 		{
 			log.error("Error occurred while deleting Forecast record from Sales Cloud: " + e);
-			e.printStackTrace();
 		}
 		
 	}
