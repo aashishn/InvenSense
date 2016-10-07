@@ -95,7 +95,10 @@ public class ForecastAction extends BaseAction {
 			UserDetailsHcmService userDetailsHcmService = new UserDetailsHcmService();
 			
 			//if (!CommonUtil.validateSSOToken(CRMODSessionManager.getCRMODSessionManager().getUrl(), ssoToken, salesRepId, action)) {
-			
+			if(!userDetailsHcmService.validateJwtToken(ssoToken)) {
+	  			log.error("Error validating SSO Token");	  			
+	  			return "authenticationFailure";
+	  		} else {
 	  			log.debug("SSO Token was validated successfully....");
 	  			
 				log.info("salesRepId = "+ salesRepId);
@@ -414,9 +417,11 @@ public class ForecastAction extends BaseAction {
 				model.addAttribute("forecast", jsonObject);
 				return "forecast";
 	  		}
-		return "forecast";
+		} else {
+			log.error("SSOToken or userId is either NULL or Empty.");  			
+  			return "authenticationFailure";
+		} 			
 	}
-
 	@RequestMapping(value="/getForecastData")	
 	public String getForecastData(String request_locale,String salesRepId,String parentSalesRepName,String sny,
 			String Customer, String BasePart,String page,String rows,String nd,

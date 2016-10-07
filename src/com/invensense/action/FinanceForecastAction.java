@@ -115,13 +115,13 @@ public class FinanceForecastAction extends BaseAction{
 	@RequestMapping(value="/viewFinanceForecast")	
 	public String viewFinanceForecast(String ssoToken, String salesRepId, String parentSalesRepName,String sny, String action, Model model) throws Exception {
 		log.debug("**** SSO token validation - Forecast UI **** ");		
+		UserDetailsHcmService userDetailsHcmService = new UserDetailsHcmService();
 		forecastService.persistSSOToken(ssoToken);
 		// Validate SSO Token for Forecast UI.
-		if((ssoToken!=null && !ssoToken.equals("")) && (salesRepId!=null && !salesRepId.equals(""))) {
-//			if (!CommonUtil.validateSSOToken(CRMODSessionManager.getCRMODSessionManager().getUrl(), ssoToken, salesRepId, action)) {
-//	  			log.error("Error validating SSO Token");	  			
-//	  			return "authenticationFailure";
-//	  		}else{
+		if(!userDetailsHcmService.validateJwtToken(ssoToken)) {
+  			log.error("Error validating SSO Token");	  			
+  			return "authenticationFailure";
+  		} else {
 	  			log.debug("SSO Token was validated successfully....");
 	  			
 				log.info("salesRepId = "+ salesRepId);
