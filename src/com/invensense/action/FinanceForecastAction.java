@@ -35,6 +35,7 @@ import com.invensense.model.User;
 import com.invensense.service.EntityService;
 import com.invensense.service.impl.FinanceForecastService;
 import com.invensense.service.impl.ForecastService;
+import com.invensense.service.impl.UserDetailsHcmService;
 import com.invensense.util.CommonUtil;
 import com.invensense.util.Constants;
 
@@ -118,7 +119,8 @@ public class FinanceForecastAction extends BaseAction{
 		UserDetailsHcmService userDetailsHcmService = new UserDetailsHcmService();
 		forecastService.persistSSOToken(ssoToken);
 		// Validate SSO Token for Forecast UI.
-		if(!userDetailsHcmService.validateJwtToken(ssoToken)) {
+		if((salesRepId!=null && !salesRepId.equals(""))) {
+			if(!userDetailsHcmService.validateJwtToken(ssoToken)) {
   			log.error("Error validating SSO Token");	  			
   			return "authenticationFailure";
   		} else {
@@ -437,12 +439,11 @@ public class FinanceForecastAction extends BaseAction{
 				JSONObject jsonObject = JSONObject.fromObject(forecast);
 				String str =  jsonObject.toString();
 				model.addAttribute("forecast", jsonObject);
-				return "financeForecast";
-//	  		}
-		} else {
+				return "financeForecast";}
+  		} else {
 			log.error("SSOToken or userId is either NULL or Empty.");  			
   			return "authenticationFailure";
-		}			
+		} 	
 	}
 
 	@RequestMapping(value="/getFinanceForecastData")	
