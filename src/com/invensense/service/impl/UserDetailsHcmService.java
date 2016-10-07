@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.handler.MessageContext;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,8 @@ public class UserDetailsHcmService {
 	protected static UserDetailsService_Service userDetailsService_Service;
 	protected UserDetailsService userDetailsService;
 	protected ObjectFactory objectFactory;
+	
+	private static List<String> skipSSOTokenValidationActionList = new ArrayList<String>();
 
 	public UserDetails findSelfUserDetailsInOsc(String jwtUserToken) throws Exception{
 		log.info("findSelfUserDetailsInOsc >>");
@@ -74,9 +77,11 @@ public class UserDetailsHcmService {
 		return userDetailsResult.getValue().get(0);             
 	}
 
-	public  boolean validateJwtToken(String jwt) throws Exception{		
+	public  boolean validateJwtToken(String jwt, String action) throws Exception{		
 		boolean valid = false;
-		
+    	if(skipValidationBasedOnAction(action)) {
+    		return true;
+    	}
 		UserDetails userDetails = findSelfUserDetailsInOsc(jwt);
 		if(userDetails!=null && userDetails.getUsername()!=null){				
 			if(userDetails.getUsername().getValue()!=null && !userDetails.getUsername().getValue().equals("")){
@@ -103,5 +108,18 @@ public class UserDetailsHcmService {
 		}else{
 			System.out.println("User info not found");
 		}
+	}
+	
+	private static boolean skipValidationBasedOnAction(String action) {
+		if(skipSSOTokenValidationActionList.isEmpty()) {
+			loadSkipSSOTokenValidationList();
+		}
+		return StringUtils.isNotBlank(action) && skipSSOTokenValidationActionList.contains(action);
+	}
+	
+	private static void loadSkipSSOTokenValidationList() {
+		skipSSOTokenValidationActionList.add("CreateFinanceForecast");
+		skipSSOTokenValidationActionList.add("ViewFinanceForecast");
+		skipSSOTokenValidationActionList.add("BackToSalesForecast");
 	}
 }

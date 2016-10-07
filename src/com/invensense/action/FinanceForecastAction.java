@@ -89,6 +89,9 @@ public class FinanceForecastAction extends BaseAction{
 			"October",
 			"November",
 			"December"};
+
+	@Resource
+	private UserDetailsHcmService userDetailsHcmService;
 	
 	@RequestMapping(value="/createFinanceForecast")	
 	public String createFinanceForecast(String ssoToken, String salesRepId, String parentSalesRepName,String sny, String action, Model model) throws Exception {
@@ -116,14 +119,14 @@ public class FinanceForecastAction extends BaseAction{
 	@RequestMapping(value="/viewFinanceForecast")	
 	public String viewFinanceForecast(String ssoToken, String salesRepId, String parentSalesRepName,String sny, String action, Model model) throws Exception {
 		log.debug("**** SSO token validation - Forecast UI **** ");		
-		UserDetailsHcmService userDetailsHcmService = new UserDetailsHcmService();
 		forecastService.persistSSOToken(ssoToken);
 		// Validate SSO Token for Forecast UI.
-		if((salesRepId!=null && !salesRepId.equals(""))) {
-			if(!userDetailsHcmService.validateJwtToken(ssoToken)) {
-  			log.error("Error validating SSO Token");	  			
-  			return "authenticationFailure";
-  		} else {
+//		if((ssoToken!=null && !ssoToken.equals("")) && (salesRepId!=null && !salesRepId.equals(""))) {
+//			if (!CommonUtil.validateSSOToken(CRMODSessionManager.getCRMODSessionManager().getUrl(), ssoToken, salesRepId, action)) {
+//	  			log.error("Error validating SSO Token");	  			
+//	  			return "authenticationFailure";
+//	  		}else{
+			if(userDetailsHcmService.validateJwtToken(ssoToken, action)) {
 	  			log.debug("SSO Token was validated successfully....");
 	  			
 				log.info("salesRepId = "+ salesRepId);
@@ -439,11 +442,12 @@ public class FinanceForecastAction extends BaseAction{
 				JSONObject jsonObject = JSONObject.fromObject(forecast);
 				String str =  jsonObject.toString();
 				model.addAttribute("forecast", jsonObject);
-				return "financeForecast";}
-  		} else {
+				return "financeForecast";
+//	  		}
+		} else {
 			log.error("SSOToken or userId is either NULL or Empty.");  			
   			return "authenticationFailure";
-		} 	
+		}			
 	}
 
 	@RequestMapping(value="/getFinanceForecastData")	

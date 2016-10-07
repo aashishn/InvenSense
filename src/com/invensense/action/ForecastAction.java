@@ -94,8 +94,8 @@ public class ForecastAction extends BaseAction {
 		if((salesRepId!=null && !salesRepId.equals(""))) {
 			UserDetailsHcmService userDetailsHcmService = new UserDetailsHcmService();
 			
-			//if (!CommonUtil.validateSSOToken(CRMODSessionManager.getCRMODSessionManager().getUrl(), ssoToken, salesRepId, action)) {
-			if(!userDetailsHcmService.validateJwtToken(ssoToken)) {
+//			if (!CommonUtil.validateSSOToken(CRMODSessionManager.getCRMODSessionManager().getUrl(), ssoToken, salesRepId, action)) {
+			if(!userDetailsHcmService.validateJwtToken(ssoToken, action)) {
 	  			log.error("Error validating SSO Token");	  			
 	  			return "authenticationFailure";
 	  		} else {
@@ -422,6 +422,7 @@ public class ForecastAction extends BaseAction {
   			return "authenticationFailure";
 		} 			
 	}
+
 	@RequestMapping(value="/getForecastData")	
 	public String getForecastData(String request_locale,String salesRepId,String parentSalesRepName,String sny,
 			String Customer, String BasePart,String page,String rows,String nd,
