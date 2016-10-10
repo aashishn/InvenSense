@@ -46,6 +46,7 @@ import com.invensense.service.impl.UserDetailsHcmService;
 import com.invensense.util.CommonUtil;
 import com.invensense.util.Constants;
 import com.invensense.ws.fusion.stubs.customObject.ForecastCustomC;
+import com.invensense.ws.fusion.stubs.customObject.ObjectFactory;
 
 import net.sf.json.JSONFunction;
 import net.sf.json.JSONObject;
@@ -895,11 +896,57 @@ public class ForecastAction extends BaseAction {
 			 foreCast.setSyncStatus(null);
 			 foreCast.setModifiedBy(Constants.INTEGRATION_USER);
 			 foreCast.setModifiedDate(new Date());
+			 scForecastImpl.update(getForecastCustomCFromForeCast(foreCast));
 			 entityService.save(foreCast);
 			 forecastService.syncFinanceForecastFromSalesForecast(foreCast);
 		 }
 	}
-	
+	private ForecastCustomC getForecastCustomCFromForeCast(ForeCast forecast)
+	{
+		ForecastCustomC  forecastCustomC = new ForecastCustomC();
+		ObjectFactory fact = new ObjectFactory();   
+		
+		forecastCustomC.setParentEndCustomerIdC(fact.createForecastCustomCParentEndCustomerIdC(new BigDecimal(forecast.getParentEndCustomer())));
+		forecastCustomC.setPartC(fact.createForecastCustomCPartC(forecast.getPartNumber()));
+		forecastCustomC.setProductCategoryC(fact.createForecastCustomCProductCategoryC(forecast.getProductCategory()));
+		forecastCustomC.setYearC(fact.createForecastCustomCYearC(forecast.getYear()));
+		forecastCustomC.setOwnerC(fact.createForecastCustomCOwnerC(getOwnerBySalesRepId(forecast.getSalesRepId())));
+		forecastCustomC.setMarket1C(fact.createForecastCustomCMarket1C(forecast.getMarket()));
+		forecastCustomC.setSubMarket1C(fact.createForecastCustomCSubMarket1C(forecast.getSubMarket()));
+		forecastCustomC.setProgramNameC(fact.createForecastCustomCProgramNameC(forecast.getProgramName()));
+		forecastCustomC.setBU1C(fact.createForecastCustomCBU1C(forecast.getBusinessUnit()));
+		
+		//forecastCustomC.setForecastTypeC(fact.createForecastCustomCForecastTypeC("Constants.FORECAST_TYPE"));
+		forecastCustomC.setId(new BigDecimal(forecast.getRowId()));
+		forecastCustomC.setASPC(fact.createForecastCustomCASPC(String.valueOf(forecast.getAsp())));
+		forecastCustomC.setASP1C(fact.createForecastCustomCASPC(String.valueOf(forecast.getAsp1())));
+		forecastCustomC.setASP2C(fact.createForecastCustomCASPC(String.valueOf(forecast.getAsp2())));
+		forecastCustomC.setASP3C(fact.createForecastCustomCASPC(String.valueOf(forecast.getAsp3())));
+		forecastCustomC.setASP4C(fact.createForecastCustomCASPC(String.valueOf(forecast.getAsp4())));
+		forecastCustomC.setASP5C(fact.createForecastCustomCASPC(String.valueOf(forecast.getAsp5())));
+		forecastCustomC.setASP6C(fact.createForecastCustomCASPC(String.valueOf(forecast.getAsp6())));
+		forecastCustomC.setASP7C(fact.createForecastCustomCASPC(String.valueOf(forecast.getAsp7())));
+		forecastCustomC.setASP8C(fact.createForecastCustomCASPC(String.valueOf(forecast.getAsp8())));
+		forecastCustomC.setASP9C(fact.createForecastCustomCASPC(String.valueOf(forecast.getAsp9())));
+		forecastCustomC.setASP10C(fact.createForecastCustomCASPC(String.valueOf(forecast.getAsp10())));
+		forecastCustomC.setASP11C(fact.createForecastCustomCASPC(String.valueOf(forecast.getAsp10())));
+		forecastCustomC.setASP12C(fact.createForecastCustomCASPC(String.valueOf(forecast.getAsp10())));
+
+		//forecastCustomC.setQuantityC(fact.createForecastCustomCQuantityC(forecast.getQuantity()));
+		forecastCustomC.setQuantity1C(fact.createForecastCustomCQuantity1C(new BigDecimal(forecast.getQuantity1())));
+		forecastCustomC.setQuantity2C(fact.createForecastCustomCQuantity2C(new BigDecimal(forecast.getQuantity2())));
+		forecastCustomC.setQuantity3C(fact.createForecastCustomCQuantity3C(new BigDecimal(forecast.getQuantity3())));
+		forecastCustomC.setQuantity4C(fact.createForecastCustomCQuantity4C(new BigDecimal(forecast.getQuantity4())));
+		forecastCustomC.setQuantity5C(fact.createForecastCustomCQuantity5C(new BigDecimal(forecast.getQuantity5())));
+		forecastCustomC.setQuantity6C(fact.createForecastCustomCQuantity6C(new BigDecimal(forecast.getQuantity6())));
+		forecastCustomC.setQuantity7C(fact.createForecastCustomCQuantity7C(new BigDecimal(forecast.getQuantity7())));
+		forecastCustomC.setQuantity8C(fact.createForecastCustomCQuantity8C(new BigDecimal(forecast.getQuantity8())));
+		forecastCustomC.setQuantity9C(fact.createForecastCustomCQuantity9C(new BigDecimal(forecast.getQuantity9())));
+		forecastCustomC.setQuantity10C(fact.createForecastCustomCQuantity10C(new BigDecimal(forecast.getQuantity10())));
+		forecastCustomC.setQuantity11C(fact.createForecastCustomCQuantity11C(new BigDecimal(forecast.getQuantity11())));
+		forecastCustomC.setQuantity12C(fact.createForecastCustomCQuantity12C(new BigDecimal(forecast.getQuantity12())));
+		return forecastCustomC;
+	}
 	
 	@RequestMapping("/createForecast")
 	@ResponseBody
@@ -912,8 +959,34 @@ public class ForecastAction extends BaseAction {
 			return "error";
 		} else {
 			loginSalesRepId = getSalesRepRowId(loginSalesRepId);
-			ForeCast currentFiscalYearForeCast = forecastService.getForeCastRecord(customerId, productId, currentFiscalYear, marketSegment, subMarket, program, bu, loginSalesRepId);
-			ForeCast nextFiscalYearForeCast = forecastService.getForeCastRecord(customerId, productId, currentFiscalYear + 1, marketSegment, subMarket, program, bu, loginSalesRepId);
+			ForeCast foreCast = new ForeCast();
+			Account account = null;
+			List<Account> accounts=null;
+			Object[] valuesAcc = new Object[1];
+			valuesAcc[0]=customerId;
+			
+			accounts = entityService.findByNameQuery("GET_ACCOUNT_BY_ID", valuesAcc);
+			if(accounts!=null && !accounts.isEmpty()){
+				account=accounts.get(0);
+			}
+			Product product = null;
+			List<Product> products=null;
+			Object[] valuesProduct = new Object[1];
+			valuesProduct[0]=productId;
+			products = entityService.findByNameQuery("GET_PRODUCT_BY_ID", valuesProduct);
+
+			if(products!=null && !products.isEmpty()){
+				product=products.get(0);
+			}
+			
+			ForeCast currentFiscalYearForeCast = forecastService.getForeCastRecord(account,product,customerId, productId, currentFiscalYear, marketSegment, subMarket, program, bu, loginSalesRepId);
+			ForeCast nextFiscalYearForeCast = forecastService.getForeCastRecord(account,product,customerId, productId, currentFiscalYear + 1, marketSegment, subMarket, program, bu, loginSalesRepId);
+			ForecastCustomC currentForecastCustomC = scForecastImpl.create(getForecastCustomCFromForeCast(account,product,customerId, productId, currentFiscalYear, marketSegment, subMarket, program, bu, loginSalesRepId));
+			ForecastCustomC nextForecastCustomC = scForecastImpl.create(getForecastCustomCFromForeCast(account,product,customerId, productId, currentFiscalYear + 1, marketSegment, subMarket, program, bu, loginSalesRepId));
+			currentFiscalYearForeCast.setName(currentForecastCustomC.getRecordName());
+			currentFiscalYearForeCast.setRowId(String.valueOf(currentForecastCustomC.getId()));
+			nextFiscalYearForeCast.setName(nextForecastCustomC.getRecordName());
+			nextFiscalYearForeCast.setRowId(String.valueOf(nextForecastCustomC.getId()));
 			entityService.save(currentFiscalYearForeCast);
 			entityService.save(nextFiscalYearForeCast);
 			//foreCastSyncJob.executeJob();
@@ -923,6 +996,30 @@ public class ForecastAction extends BaseAction {
 		return "success";
 	}
 
+	private ForecastCustomC getForecastCustomCFromForeCast(Account account, Product product,String customerId, String productId, Integer fiscalYear, String marketSegment, String subMarket, String program, String bu, String loginSalesRepId)
+	{
+		ForecastCustomC  forecastCustomC = new ForecastCustomC();
+		ObjectFactory fact = new ObjectFactory();   
+		//forecastCustomC.setForecastTypeC(fact.createForecastCustomCForecastTypeC("Constants.FORECAST_TYPE"));
+		forecastCustomC.setParentEndCustomerIdC(fact.createForecastCustomCParentEndCustomerIdC(new BigDecimal(account.getId())));
+		forecastCustomC.setPartC(fact.createForecastCustomCPartC(product.getPartNumber()));
+		forecastCustomC.setProductCategoryC(fact.createForecastCustomCProductCategoryC(product.getProductCategory()));
+		forecastCustomC.setYearC(fact.createForecastCustomCYearC(String.valueOf(fiscalYear)));
+		forecastCustomC.setOwnerC(fact.createForecastCustomCOwnerC(getOwnerBySalesRepId(loginSalesRepId)));
+		forecastCustomC.setMarket1C(fact.createForecastCustomCMarket1C(marketSegment));
+		forecastCustomC.setSubMarket1C(fact.createForecastCustomCSubMarket1C(subMarket));
+		forecastCustomC.setProgramNameC(fact.createForecastCustomCProgramNameC(program));
+		forecastCustomC.setBU1C(fact.createForecastCustomCBU1C(bu));
+		return forecastCustomC;
+	}
+	private String getOwnerBySalesRepId(String loginSalesRepId) {
+		List<User> userList = entityService.findByNameQuery(Constants.GET_USER_BY_USER_NAME, new Object[] {loginSalesRepId});
+		if(!userList.isEmpty()) {
+			User user = userList.get(0);
+			return (user.getFirstName() + " " +user.getLastName());
+		}
+		return null;
+	}
 	private String getSalesRepRowId(String loginSalesRepId) {
 		List<User> userList = entityService.findByNameQuery(Constants.GET_USER_BY_USER_SIGN_IN_ID, new Object[] {loginSalesRepId});
 		if(!userList.isEmpty()) {

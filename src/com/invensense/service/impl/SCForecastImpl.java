@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.invensense.util.PropFileUtil;
+import com.invensense.ws.fusion.stubs.customObject.ForecastCustomC;
 import com.invensense.ws.fusion.stubs.customObject.SalesCustomObjectService;
 import com.invensense.ws.fusion.stubs.customObject.SalesCustomObjectService_Service;
 import com.invensense.ws.fusion.stubs.customObject.ServiceException;
@@ -51,7 +52,36 @@ public class SCForecastImpl {
 		}
 		
 	}
-
+	public ForecastCustomC create( ForecastCustomC forecastCustomC) throws Exception {
+		ForecastCustomC forecastCustomResultC =null;
+		try {
+			    forecastCustomResultC = (ForecastCustomC)salesCustomObjectService.createEntity(forecastCustomC, "Forecast_Custom_c");
+			} 
+		catch (ServiceException e) 
+		{
+				log.error("Error occurred while creating Forecast record from Sales Cloud: " + e);
+				e.printStackTrace();
+		}
+		log.info("Forecast Created Successfully");
+			    
+		return forecastCustomResultC;
+	}
+	
+	
+	public ForecastCustomC update( ForecastCustomC forecastCustomC) throws Exception {
+		ForecastCustomC forecastCustomResultC =null;
+		try {
+			    forecastCustomResultC = (ForecastCustomC)salesCustomObjectService.updateEntity(forecastCustomC, "Forecast_Custom_c");
+			} 
+		catch (ServiceException e) 
+		{
+				log.error("Error occurred while updating Forecast record from Sales Cloud: " + e);
+				e.printStackTrace();
+		}
+		log.info("Forecast Updated Successfully");
+			    
+		return forecastCustomResultC;
+	}
 	
 
 }
