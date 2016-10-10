@@ -158,7 +158,16 @@ public class FinanceForecastAction extends BaseAction{
 					users = entityService.findByNameQuery(Constants.GET_USER_BY_USER_SIGN_IN_ID, values);
 					if(users!=null && !users.isEmpty()){
 						user=users.get(0);
-					}		
+					}
+					else
+					{
+						users = entityService.findByNameQuery(Constants.GET_USER_BY_USER_NAME, values);
+						if(users!=null && !users.isEmpty()){
+							user=users.get(0);
+						}
+					}
+					
+					
 				} else {
 					List<User> users=null;
 					Object[] values = new Object[1];
