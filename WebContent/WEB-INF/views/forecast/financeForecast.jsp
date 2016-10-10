@@ -97,7 +97,7 @@ div.ui-dialog div.ui-dialog-titlebar {padding: 0.3em 0.2em 0.2em 0.3em;}
 	<td style="display:none;">
 	<b>Sales Rep : </b><select id="salesRepName" name="salesRepName" onchange="refresh();">
 		<c:forEach items="${salesRepList}" var="user">
-			<option value="${user.id}">${user.breadcrumName}</option>
+			<option value="${user.userSignInId}">${user.breadcrumName}</option>
 		</c:forEach>
 	</select>
 	</td>
