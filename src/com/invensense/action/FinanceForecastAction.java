@@ -543,7 +543,7 @@ public class FinanceForecastAction extends BaseAction{
 			vals[0] = salesRepId;
 			List<User> users = null;		
 			User user = null;
-			users = entityService.findByNameQuery(Constants.GET_USER_BY_USER_SIGN_IN_ID, vals);
+			users = entityService.findByNameQuery(Constants.GET_USER_BY_USER_NAME, vals);
 			if(users!=null){
 				user = users.get(0);
 			}
