@@ -451,26 +451,9 @@ public class ForecastService {
 		}
 	}
 	
-	public ForeCast getForeCastRecord(String customerId, String productId, Integer fiscalYear, String marketSegment, String subMarket, String program, String bu, String loginSalesRepId) {
+	public ForeCast getForeCastRecord(Account account, Product product,String customerId, String productId, Integer fiscalYear, String marketSegment, String subMarket, String program, String bu, String loginSalesRepId) {
 		ForeCast foreCast = new ForeCast();
-		Account account = null;
-		List<Account> accounts=null;
-		Object[] valuesAcc = new Object[1];
-		valuesAcc[0]=customerId;
 		
-		accounts = entityService.findByNameQuery("GET_ACCOUNT_BY_ID", valuesAcc);
-		if(accounts!=null && !accounts.isEmpty()){
-			account=accounts.get(0);
-		}
-		Product product = null;
-		List<Product> products=null;
-		Object[] valuesProduct = new Object[1];
-		valuesProduct[0]=productId;
-		products = entityService.findByNameQuery("GET_PRODUCT_BY_ID", valuesProduct);
-
-		if(products!=null && !products.isEmpty()){
-			product=products.get(0);
-		}
 		
 		//foreCast.setName(customerId + "-" + product.getProductName() + "-" + fiscalYear);
 		foreCast.setForecastType(Constants.FORECAST_TYPE_SALES_FORECAST);
