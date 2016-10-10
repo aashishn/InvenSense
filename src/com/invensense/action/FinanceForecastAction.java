@@ -159,15 +159,6 @@ public class FinanceForecastAction extends BaseAction{
 					if(users!=null && !users.isEmpty()){
 						user=users.get(0);
 					}
-					else
-					{
-						users = entityService.findByNameQuery(Constants.GET_USER_BY_USER_NAME, values);
-						if(users!=null && !users.isEmpty()){
-							user=users.get(0);
-						}
-					}
-					
-					
 				} else {
 					List<User> users=null;
 					Object[] values = new Object[1];
@@ -552,7 +543,7 @@ public class FinanceForecastAction extends BaseAction{
 			vals[0] = salesRepId;
 			List<User> users = null;		
 			User user = null;
-			users = entityService.findByNameQuery(Constants.GET_USER_BY_USER_NAME, vals);
+			users = entityService.findByNameQuery(Constants.GET_USER_BY_USER_SIGN_IN_ID, vals);
 			if(users!=null){
 				user = users.get(0);
 			}
