@@ -257,7 +257,7 @@ public class Constants {
 			"		AND UPPER(f.parent_end_customer_name) LIKE UPPER(?) AND UPPER(f.product_name) LIKE UPPER(?)			\r\n" + 
 			"		AND UPPER(f.market) LIKE UPPER(?) AND UPPER(f.sub_market) LIKE UPPER(?)			\r\n" + 
 			"		AND UPPER(f.program_name) LIKE UPPER(?) AND UPPER(f.business_unit) LIKE UPPER(?)			\r\n" + 
-			") s1 GROUP BY revenue_id,end_customer_id,parent_end_customer_name,year,product_name,market, sub_market, program_name, business_unit,data,seq		\r\n" + 
+			") s1 GROUP BY revenue_id,end_customer_id,parent_end_customer_name,year,product_name,market, sub_market, program_name, business_unit,data,created_date,seq		\r\n" + 
 			"UNION\r\n" + 
 			"SELECT  concat(revenue_id,':',year,':',end_customer_id),end_customer_id,parent_end_customer_name,market, sub_market, program_name, business_unit,product_name,data,seq,sum(Apr),sum(May),sum(Jun),0 q1,sum(Jul),\r\n" + 
 			"					sum(Aug),sum(Sep),0 q2,sum(Oct),sum(Nov),sum(Dec1),0 q3,sum(Jan),sum(Feb),sum(Mar),0 q4,created_date \r\n" + 
@@ -284,7 +284,7 @@ public class Constants {
 			"		AND UPPER(f.parent_end_customer_name) LIKE UPPER(?) AND UPPER(f.product_name) LIKE UPPER(?)			\r\n" + 
 			"		AND UPPER(f.market) LIKE UPPER(?) AND UPPER(f.sub_market) LIKE UPPER(?)			\r\n" + 
 			"		AND UPPER(f.program_name) LIKE UPPER(?) AND UPPER(f.business_unit) LIKE UPPER(?)			\r\n" + 
-			") s1 GROUP BY revenue_id,end_customer_id,parent_end_customer_name,year,product_name,market, sub_market, program_name, business_unit,data,seq\r\n" + 
+			") s1 GROUP BY revenue_id,end_customer_id,parent_end_customer_name,year,product_name,market, sub_market, program_name, business_unit,data,created_date,seq\r\n" + 
 			"UNION\r\n" + 
 			"SELECT  concat(revenue_id,':',year,':',end_customer_id),end_customer_id,parent_end_customer_name,market, sub_market, program_name, business_unit,product_name,data,seq,sum(Apr),sum(May),sum(Jun),0 q1,sum(Jul),\r\n" + 
 			"					sum(Aug),sum(Sep),0 q2,sum(Oct),sum(Nov),sum(Dec1),0 q3,sum(Jan),sum(Feb),sum(Mar),0 q4,created_date \r\n" + 
@@ -311,7 +311,7 @@ public class Constants {
 			"		AND UPPER(f.market) LIKE UPPER(?) AND UPPER(f.sub_market) LIKE UPPER(?)			\r\n" + 
 			"		AND UPPER(f.program_name) LIKE UPPER(?) AND UPPER(f.business_unit) LIKE UPPER(?)			\r\n" + 
 			"		AND f.month <> 'NA'		\r\n" + 
-			") s1 GROUP BY revenue_id,end_customer_id,parent_end_customer_name,year,product_name,market, sub_market, program_name, business_unit,data,seq\r\n" + 
+			") s1 GROUP BY revenue_id,end_customer_id,parent_end_customer_name,year,product_name,market, sub_market, program_name, business_unit,data,created_date,seq\r\n" + 
 //			" order by parent_end_customer,market, sub_market, program_name, business_unit,product_name,seq asc\r\n" + 
 			"";				
 	public static final String GET_FORECAST_TOTAL_FOR_FINANCE_FORECAST = "SELECT sum(Jan),sum(Feb),sum(Mar),sum(Apr),sum(May),sum(Jun),sum(Jul),sum(Aug),sum(Sep),\r\n" + 
