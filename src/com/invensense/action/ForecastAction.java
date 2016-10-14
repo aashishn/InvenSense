@@ -906,7 +906,7 @@ public class ForecastAction extends BaseAction {
 		ForecastCustomC  forecastCustomC = new ForecastCustomC();
 		ObjectFactory fact = new ObjectFactory();   
 		
-		forecastCustomC.setParentEndCustomerIdC(fact.createForecastCustomCParentEndCustomerIdC(new BigDecimal(forecast.getParentEndCustomer())));
+		forecastCustomC.setParentEndCustomerIdC( new BigDecimal(account.getId()));
 		forecastCustomC.setPartC(fact.createForecastCustomCPartC(forecast.getPartNumber()));
 		forecastCustomC.setProductCategoryC(fact.createForecastCustomCProductCategoryC(forecast.getProductCategory()));
 		forecastCustomC.setYearC(fact.createForecastCustomCYearC(forecast.getYear()));
@@ -1001,7 +1001,7 @@ public class ForecastAction extends BaseAction {
 		ForecastCustomC  forecastCustomC = new ForecastCustomC();
 		ObjectFactory fact = new ObjectFactory();   
 		//forecastCustomC.setForecastTypeC(fact.createForecastCustomCForecastTypeC("Constants.FORECAST_TYPE"));
-		forecastCustomC.setParentEndCustomerIdC(fact.createForecastCustomCParentEndCustomerIdC(new BigDecimal(account.getId())));
+		forecastCustomC.setParentEndCustomerIdC( new BigDecimal(account.getId()));
 		forecastCustomC.setPartC(fact.createForecastCustomCPartC(product.getPartNumber()));
 		forecastCustomC.setProductCategoryC(fact.createForecastCustomCProductCategoryC(product.getProductCategory()));
 		forecastCustomC.setYearC(fact.createForecastCustomCYearC(String.valueOf(fiscalYear)));
