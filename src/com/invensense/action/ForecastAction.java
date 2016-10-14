@@ -906,7 +906,7 @@ public class ForecastAction extends BaseAction {
 		ForecastCustomC  forecastCustomC = new ForecastCustomC();
 		ObjectFactory fact = new ObjectFactory();   
 		
-		forecastCustomC.setParentEndCustomerIdC( new BigDecimal(account.getId()));
+		forecastCustomC.setParentEndCustomerIdC( new BigDecimal(forecast.getParentEndCustomer()));
 		forecastCustomC.setPartC(fact.createForecastCustomCPartC(forecast.getPartNumber()));
 		forecastCustomC.setProductCategoryC(fact.createForecastCustomCProductCategoryC(forecast.getProductCategory()));
 		forecastCustomC.setYearC(fact.createForecastCustomCYearC(forecast.getYear()));
