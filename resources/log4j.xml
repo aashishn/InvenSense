@@ -5,7 +5,7 @@
 		class="org.apache.log4j.RollingFileAppender">
 		<param name="maxFileSize" value="3000KB" />
 		<param name="maxBackupIndex" value="5" />
-		<param name="File" value="/opt/tomcat/logs/InvenSense.log" />
+		<param name="File" value="/home/oracrm/CRM/tomcat8/apache-tomcat-8.0.39/logs/InvenSenseSc.log" />
 		<param name="threshold" value="info" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern"
@@ -17,7 +17,7 @@
 		class="org.apache.log4j.RollingFileAppender">
 		<param name="maxFileSize" value="3000KB" />
 		<param name="maxBackupIndex" value="5" />
-		<param name="File" value="/opt/tomcat/logs/InvenSense-info.log" />
+		<param name="File" value="/home/oracrm/CRM/tomcat8/apache-tomcat-8.0.39/logs/InvenSenseSc-info.log" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern"
 				value="%d{DATE} %5p %c{1}:%L - %m%n" />
@@ -32,7 +32,7 @@
 		class="org.apache.log4j.RollingFileAppender">
 		<param name="maxFileSize" value="3000KB" />
 		<param name="maxBackupIndex" value="5" />
-		<param name="File" value="/opt/tomcat/logs/InvenSense-debug.log" />
+		<param name="File" value="/home/oracrm/CRM/tomcat8/apache-tomcat-8.0.39/logs/InvenSenseSc-debug.log" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern"
 				value="%d{DATE} %5p %c{1}:%L - %m%n" />
@@ -47,7 +47,7 @@
 		class="org.apache.log4j.RollingFileAppender">
 		<param name="maxFileSize" value="3000KB" />
 		<param name="maxBackupIndex" value="5" />
-		<param name="File" value="/opt/tomcat/logs/InvenSense-warn.log" />
+		<param name="File" value="/home/oracrm/CRM/tomcat8/apache-tomcat-8.0.39/logs/InvenSenseSc-warn.log" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern"
 				value="%d{DATE} %5p %c{1}:%L - %m%n" />
@@ -62,7 +62,7 @@
 		class="org.apache.log4j.RollingFileAppender">
 		<param name="maxFileSize" value="3000KB" />
 		<param name="maxBackupIndex" value="5" />
-		<param name="File" value="/opt/tomcat/logs/InvenSense-error.log" />
+		<param name="File" value="/home/oracrm/CRM/tomcat8/apache-tomcat-8.0.39/logs/InvenSenseSc-error.log" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern"
 				value="%d{DATE} %5p %c{1}:%L - %m%n" />
@@ -92,7 +92,7 @@
 		    <appender-ref ref="infofile" />
   	 </logger>
   	 <logger name="httpclient.wire">
-		<level value="debug"/>
+		<level value="error"/>
 		<appender-ref ref="infofile" />
 	</logger>
 	 <logger name="com.serene.crmod">
@@ -100,13 +100,13 @@
 		    <appender-ref ref="infofile" />
   	 </logger>
   	 <logger name="com.serene.crmod.exception">
-		<level value="debug"/>
+		<level value="error"/>
 		<appender-ref ref="infofile" />
 	</logger>
 
 	
   	 <logger name="com.invensense">
-		<level value="debug"/>
+		<level value="info"/>
 		<appender-ref ref="infofile" />
 	</logger>	
 

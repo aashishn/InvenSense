@@ -17,7 +17,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.2
  * 
  */
-@WebServiceClient(name = "SalesCustomObjectService", targetNamespace = "http://xmlns.oracle.com/apps/sales/custExtn/extnService/", wsdlLocation = "https://eeal-test.crm.us2.oraclecloud.com/opptyMgmtExtensibility/SalesCustomObjectService?WSDL")
+@WebServiceClient(name = "SalesCustomObjectService", targetNamespace = "http://xmlns.oracle.com/apps/sales/custExtn/extnService/", wsdlLocation = "https://eeal.crm.us2.oraclecloud.com/opptyMgmtExtensibility/SalesCustomObjectService?WSDL")
 public class SalesCustomObjectService_Service
     extends Service
 {
@@ -30,7 +30,7 @@ public class SalesCustomObjectService_Service
         URL url = null;
         WebServiceException e = null;
         try {
-            url = new URL("https://eeal-test.crm.us2.oraclecloud.com/opptyMgmtExtensibility/SalesCustomObjectService?WSDL");
+            url = new URL("https://eeal.crm.us2.oraclecloud.com/opptyMgmtExtensibility/SalesCustomObjectService?WSDL");
         } catch (MalformedURLException ex) {
             e = new WebServiceException(ex);
         }

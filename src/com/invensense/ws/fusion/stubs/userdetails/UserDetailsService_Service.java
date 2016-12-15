@@ -17,7 +17,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.2
  * 
  */
-@WebServiceClient(name = "UserDetailsService", targetNamespace = "http://xmlns.oracle.com/apps/hcm/people/roles/userDetailsServiceV2/", wsdlLocation = "https://eeal-test.hcm.us2.oraclecloud.com:443/hcmPeopleRolesV2/UserDetailsService?wsdl")
+@WebServiceClient(name = "UserDetailsService", targetNamespace = "http://xmlns.oracle.com/apps/hcm/people/roles/userDetailsServiceV2/", wsdlLocation = "https://eeal.hcm.us2.oraclecloud.com:443/hcmPeopleRolesV2/UserDetailsService?wsdl")
 public class UserDetailsService_Service
     extends Service
 {
@@ -30,7 +30,7 @@ public class UserDetailsService_Service
         URL url = null;
         WebServiceException e = null;
         try {
-            url = new URL("https://eeal-test.hcm.us2.oraclecloud.com:443/hcmPeopleRolesV2/UserDetailsService?wsdl");
+            url = new URL("https://eeal.hcm.us2.oraclecloud.com:443/hcmPeopleRolesV2/UserDetailsService?wsdl");
         } catch (MalformedURLException ex) {
             e = new WebServiceException(ex);
         }
