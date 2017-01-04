@@ -97,6 +97,7 @@ public class ForecastAction extends BaseAction {
 			
 //			if (!CommonUtil.validateSSOToken(CRMODSessionManager.getCRMODSessionManager().getUrl(), ssoToken, salesRepId, action)) {
 			if(!userDetailsHcmService.validateJwtToken(ssoToken, action)) {
+				//if(1==2) {
 	  			log.error("Error validating SSO Token");	  			
 	  			return "authenticationFailure";
 	  		} else {
@@ -559,7 +560,13 @@ public class ForecastAction extends BaseAction {
 					q.setParameter(22, SubMarket);
 					q.setParameter(23, Program);
 					q.setParameter(24, BU);
-					
+					q.setParameter(25, year);
+					q.setParameter(26, salesUser.getId());
+					q.setParameter(27, BasePart);
+					q.setParameter(28, Market);
+					q.setParameter(29, SubMarket);
+					q.setParameter(30, Program);
+					q.setParameter(31, BU);
 					List forecastPerUser = q.getResultList();
 					
 					if(forecastPerUser!= null && !forecastPerUser.isEmpty()) {
