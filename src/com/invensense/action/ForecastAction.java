@@ -527,14 +527,15 @@ public class ForecastAction extends BaseAction {
 			List<User> userHeirarchyList = forecastService.getUserHeirarchy(userID);
 			addAllUsersForAdministrator(userHeirarchyList, userID);
 			Set<User> uniqueUser = new LinkedHashSet<User>(userHeirarchyList);
-	
+			List<String> accounts = forecastService.getForecastParentAccountIdsByUser(userID);
+			String uniqueAccounts =StringUtils.join(accounts.toArray(), ",");
 			for (User salesUser : uniqueUser) {
 				// Get Forecast Data from db
 				if (salesUser.getId() !=  null){
 					log.info("Calling get Forecast Data");
 					StringBuilder sqlQuery = new StringBuilder(Constants.GET_DATA_FOR_FORECAST);
 					sqlQuery.append(getOrderByClause(sidx,sord));
-					Query q=entityService.getEntityManager().createNativeQuery(sqlQuery.toString());				
+					Query q=entityService.getEntityManager().createNativeQuery(sqlQuery.toString().replace("IN_CLAUSE", uniqueAccounts));				
 					log.info("year="+year);
 					q.setParameter(1, year);
 					q.setParameter(2, salesUser.getId());
@@ -560,13 +561,7 @@ public class ForecastAction extends BaseAction {
 					q.setParameter(22, SubMarket);
 					q.setParameter(23, Program);
 					q.setParameter(24, BU);
-					q.setParameter(25, year);
-					q.setParameter(26, salesUser.getId());
-					q.setParameter(27, BasePart);
-					q.setParameter(28, Market);
-					q.setParameter(29, SubMarket);
-					q.setParameter(30, Program);
-					q.setParameter(31, BU);
+					
 					List forecastPerUser = q.getResultList();
 					
 					if(forecastPerUser!= null && !forecastPerUser.isEmpty()) {

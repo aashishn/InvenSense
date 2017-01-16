@@ -839,5 +839,25 @@ public class ForecastService {
 		}
 		return accountList;
 	}
+	
+	public List<String> getForecastParentAccountIdsByUser(String userId) {
+		List<String> accountList = new ArrayList<String>();
+		List<User> userList = getUserHeirarchy(userId);
+		for (User user : userList) {
+			List<AccountTeamWS1> accountTeamList = entityService.findByNameQuery(Constants.GET_ACCOUNT_TEAM_BY_USER_ID, new Object[] {user.getId()});
+			for (AccountTeamWS1 accountTeamWS1 : accountTeamList) {
+				String accountId = accountTeamWS1.getAccountId();
+				if(StringUtils.isNotBlank(accountId)) {
+					List<Account> stagingAccountList = entityService.findByNameQuery(Constants.CHECK_ACCOUNT_IS_PARENT, 
+														new Object[] {accountId, Constants.ACCOUNT_TYPE_PARENT_CUSTOMER});
+					if(!stagingAccountList.isEmpty()) {
+						for(Account account:stagingAccountList)
+						accountList.add(account.getId());
+					}
+				}
+			}
+		}
+		return accountList;
+	}
  
 }

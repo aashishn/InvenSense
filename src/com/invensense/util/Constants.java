@@ -74,6 +74,7 @@ public class Constants {
 	public static final String QUOTE_PARTIALLY_APPROVED = "Partially Approved";
 	public static final String OPPORTUNITY_REVENUE_TYPE_LOST = "Lost";
 	public static final String FORECAST_TYPE_SALES_FORECAST = "Sales Forecast";	
+
 	public static final String GET_DATA_FOR_FORECAST ="  SELECT  concat(revenue_id,':',year,':',end_customer_id),end_customer_id,parent_end_customer_name,market, sub_market, program_name, business_unit,product_name,data,seq,sum(Apr),sum(May),sum(Jun),0 q1,sum(Jul),\r\n" + 
 			"					sum(Aug),sum(Sep),0 q2,sum(Oct),sum(Nov),sum(Dec1),0 q3,sum(Jan),sum(Feb),sum(Mar),0 q4,created_date \r\n" + 
 			"FROM( \r\n" + 
@@ -98,6 +99,7 @@ public class Constants {
 			"		AND UPPER(f.parent_end_customer_name) LIKE UPPER(?) AND UPPER(f.product_name) LIKE UPPER(?)			\r\n" + 
 			"		AND UPPER(f.market) LIKE UPPER(?) AND UPPER(f.sub_market) LIKE UPPER(?)			\r\n" + 
 			"		AND UPPER(f.program_name) LIKE UPPER(?) AND UPPER(f.business_unit) LIKE UPPER(?)			\r\n" + 
+			"		AND f.end_customer_id IN (IN_CLAUSE)			\r\n" + 
 			") s1 GROUP BY revenue_id,end_customer_id,parent_end_customer_name,year,product_name,market, sub_market, program_name, business_unit,data,seq		\r\n" + 
 			"UNION\r\n" + 
 			"SELECT  concat(revenue_id,':',year,':',end_customer_id),end_customer_id,parent_end_customer_name,market, sub_market, program_name, business_unit,product_name,data,seq,sum(Apr),sum(May),sum(Jun),0 q1,sum(Jul),\r\n" + 
@@ -124,6 +126,7 @@ public class Constants {
 			"		AND UPPER(f.parent_end_customer_name) LIKE UPPER(?) AND UPPER(f.product_name) LIKE UPPER(?)			\r\n" + 
 			"		AND UPPER(f.market) LIKE UPPER(?) AND UPPER(f.sub_market) LIKE UPPER(?)			\r\n" + 
 			"		AND UPPER(f.program_name) LIKE UPPER(?) AND UPPER(f.business_unit) LIKE UPPER(?)			\r\n" + 
+			"		AND f.end_customer_id IN(IN_CLAUSE)			\r\n" + 
 			") s1 GROUP BY revenue_id,end_customer_id,parent_end_customer_name,year,product_name,market, sub_market, program_name, business_unit,data,seq\r\n" + 
 			"UNION\r\n" + 
 			"SELECT  concat(revenue_id,':',year,':',end_customer_id),end_customer_id,parent_end_customer_name,market, sub_market, program_name, business_unit,product_name,data,seq,sum(Apr),sum(May),sum(Jun),0 q1,sum(Jul),\r\n" + 
@@ -150,32 +153,7 @@ public class Constants {
 			"		AND UPPER(f.parent_end_customer_name) LIKE UPPER(?) AND UPPER(f.product_name) LIKE UPPER(?)			\r\n" + 
 			"		AND UPPER(f.market) LIKE UPPER(?) AND UPPER(f.sub_market) LIKE UPPER(?)			\r\n" + 
 			"		AND UPPER(f.program_name) LIKE UPPER(?) AND UPPER(f.business_unit) LIKE UPPER(?)			\r\n" + 
-			") s1 GROUP BY revenue_id,end_customer_id,parent_end_customer_name,year,product_name,market, sub_market, program_name, business_unit,data,seq\r\n" + 
-			"UNION\r\n" + 
-			"SELECT  concat(revenue_id,':',year,':',end_customer_id),end_customer_id,parent_end_customer_name,market, sub_market, program_name, business_unit,product_name,data,seq,sum(Apr),sum(May),sum(Jun),0 q1,sum(Jul),\r\n" + 
-			"					sum(Aug),sum(Sep),0 q2,sum(Oct),sum(Nov),sum(Dec1),0 q3,sum(Jan),sum(Feb),sum(Mar),0 q4,created_date \r\n" + 
-			"FROM( \r\n" + 
-			"		SELECT f.product_id revenue_id, f.end_customer_id, f.parent_end_customer_name, f.year,\r\n" + 
-			"		f.market,f.sub_market,f.program_name,f.business_unit,f.product_name,'Forecast ($)' AS data,3 AS 'seq', f.created_date,\r\n" + 
-			"							ROUND((ifnull(quantity1,0)*ifnull(asp1,0)) ,1) AS 'Apr',\r\n" + 
-			"							ROUND((ifnull(quantity2,0)*ifnull(asp2,0)) ,1) AS 'May',\r\n" + 
-			"							ROUND((ifnull(quantity3,0)*ifnull(asp3,0)) ,1) AS 'Jun',\r\n" + 
-			"							ROUND((ifnull(quantity4,0)*ifnull(asp4,0)) ,1) AS 'Jul',\r\n" + 
-			"							ROUND((ifnull(quantity5,0)*ifnull(asp5,0)) ,1) AS 'Aug',\r\n" + 
-			"							ROUND((ifnull(quantity6,0)*ifnull(asp6,0)) ,1) AS 'Sep',\r\n" + 
-			"							ROUND((ifnull(quantity7,0)*ifnull(asp7,0)) ,1) AS 'Oct',\r\n" + 
-			"							ROUND((ifnull(quantity8,0)*ifnull(asp8,0)) ,1) AS 'Nov',\r\n" + 
-			"							ROUND((ifnull(quantity9,0)*ifnull(asp9,0)) ,1) AS 'Dec1',\r\n" + 
-			"							ROUND((ifnull(quantity10,0)*ifnull(asp10,0)) ,1) AS 'Jan',\r\n" + 
-			"							ROUND((ifnull(quantity11,0)*ifnull(asp11,0)) ,1) AS 'Feb',\r\n" + 
-			"							ROUND((ifnull(quantity12,0)*ifnull(asp12,0)) ,1) AS 'Mar'\r\n" + 
-			"		FROM forecast f\r\n" + 
-			"		WHERE\r\n" + 
-			"		f.year= ?\r\n" + 
-			"		AND f.end_customer_id  in (select a.id from invensense_forecast.account a, invensense_forecast.account_team at where a.id=at.account_id and at.user_id=?) \r\n" + 
-			"		AND UPPER(f.product_name) LIKE UPPER(?)			\r\n" + 
-			"		AND UPPER(f.market) LIKE UPPER(?) AND UPPER(f.sub_market) LIKE UPPER(?)			\r\n" + 
-			"		AND UPPER(f.program_name) LIKE UPPER(?) AND UPPER(f.business_unit) LIKE UPPER(?)			\r\n" + 
+			"		AND f.end_customer_id IN(IN_CLAUSE)			\r\n" + 
 			") s1 GROUP BY revenue_id,end_customer_id,parent_end_customer_name,year,product_name,market, sub_market, program_name, business_unit,data,seq\r\n" + 
 //			" order by parent_end_customer,market, sub_market, program_name, business_unit,product_name,seq asc\r\n" + 
 			"";				
