@@ -528,14 +528,19 @@ public class ForecastAction extends BaseAction {
 			addAllUsersForAdministrator(userHeirarchyList, userID);
 			Set<User> uniqueUser = new LinkedHashSet<User>(userHeirarchyList);
 			List<String> accounts = forecastService.getForecastParentAccountIdsByUser(userID);
-			String uniqueAccounts =StringUtils.join(accounts.toArray(), ",");
+			String inClause ="'%'";
+			if(accounts.size()>0)
+			{
+				String uniqueAccounts =StringUtils.join(accounts.toArray(), ",");
+				inClause = "'" + StringUtils.join(accounts.toArray(),"','") + "'";
+			}
 			for (User salesUser : uniqueUser) {
 				// Get Forecast Data from db
 				if (salesUser.getId() !=  null){
 					log.info("Calling get Forecast Data");
 					StringBuilder sqlQuery = new StringBuilder(Constants.GET_DATA_FOR_FORECAST);
 					sqlQuery.append(getOrderByClause(sidx,sord));
-					Query q=entityService.getEntityManager().createNativeQuery(sqlQuery.toString().replace("IN_CLAUSE", uniqueAccounts));				
+					Query q=entityService.getEntityManager().createNativeQuery(sqlQuery.toString().replace("IN_CLAUSE", inClause));				
 					log.info("year="+year);
 					q.setParameter(1, year);
 					q.setParameter(2, salesUser.getId());
