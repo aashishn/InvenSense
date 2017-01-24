@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -35,6 +36,7 @@ import com.invensense.model.FinanceForecastExist;
 import com.invensense.model.ForeCast;
 import com.invensense.model.ForecastAttribute;
 import com.invensense.model.ForecastData;
+import com.invensense.model.ForecastResultSet;
 import com.invensense.model.PicklistLookup;
 import com.invensense.model.Product;
 import com.invensense.model.SalesForecastLockInfo;
@@ -512,7 +514,8 @@ public class ForecastAction extends BaseAction {
 			LinkedHashMap data = new LinkedHashMap();
 			List list = new LinkedList();
 			List forecasts = new LinkedList();
-
+			//List forecastsUnique = new LinkedList();
+			
 			// Get user id
 			Object[] vals = new Object[1];
 			vals[0] = salesRepId;
@@ -527,51 +530,96 @@ public class ForecastAction extends BaseAction {
 			List<User> userHeirarchyList = forecastService.getUserHeirarchy(userID);
 			addAllUsersForAdministrator(userHeirarchyList, userID);
 			Set<User> uniqueUser = new LinkedHashSet<User>(userHeirarchyList);
-			List<String> accounts = forecastService.getForecastParentAccountIdsByUser(userID);
-			String inClause ="'%'";
+			StringBuilder sqlAccountsQuery = new StringBuilder(Constants.GET_ACCOUNTS);
+			Query accountQuery=entityService.getEntityManager().createNativeQuery(sqlAccountsQuery.toString());
+			accountQuery.setParameter(1, salesRepId);
+			List accounts = accountQuery.getResultList();
+			String uniqueAccounts = null;
 			if(accounts.size()>0)
-			{
-				String uniqueAccounts =StringUtils.join(accounts.toArray(), ",");
-				inClause = "'" + StringUtils.join(accounts.toArray(),"','") + "'";
-			}
+			 uniqueAccounts =StringUtils.join(accounts.toArray(), ",");
+
 			for (User salesUser : uniqueUser) {
 				// Get Forecast Data from db
 				if (salesUser.getId() !=  null){
 					log.info("Calling get Forecast Data");
-					StringBuilder sqlQuery = new StringBuilder(Constants.GET_DATA_FOR_FORECAST);
-					sqlQuery.append(getOrderByClause(sidx,sord));
-					Query q=entityService.getEntityManager().createNativeQuery(sqlQuery.toString().replace("IN_CLAUSE", inClause));				
-					log.info("year="+year);
-					q.setParameter(1, year);
-					q.setParameter(2, salesUser.getId());
-					q.setParameter(3, Customer);
-					q.setParameter(4, BasePart);
-					q.setParameter(5, Market);
-					q.setParameter(6, SubMarket);
-					q.setParameter(7, Program);
-					q.setParameter(8, BU);
-					q.setParameter(9, year);
-					q.setParameter(10, salesUser.getId());
-					q.setParameter(11, Customer);
-					q.setParameter(12, BasePart);
-					q.setParameter(13, Market);
-					q.setParameter(14, SubMarket);
-					q.setParameter(15, Program);
-					q.setParameter(16, BU);
-					q.setParameter(17, year);
-					q.setParameter(18, salesUser.getId());
-					q.setParameter(19, Customer);
-					q.setParameter(20, BasePart);
-					q.setParameter(21, Market);
-					q.setParameter(22, SubMarket);
-					q.setParameter(23, Program);
-					q.setParameter(24, BU);
 					
-					List forecastPerUser = q.getResultList();
-					
-					if(forecastPerUser!= null && !forecastPerUser.isEmpty()) {
-						forecasts.addAll(forecastPerUser);
+					Query queryParent=null;
+					Query query=null;
+					if( salesUser.getId().equalsIgnoreCase(salesRepId))
+					{
+						StringBuilder sqlQueryParent = new StringBuilder(Constants.GET_DATA_FOR_PARENT_FORECAST);
+						sqlQueryParent.append(getOrderByClause(sidx,sord));
+						if(uniqueAccounts!=null)
+						queryParent=entityService.getEntityManager().createNativeQuery(sqlQueryParent.toString().replace("IN_CLAUSE", "AND f.end_customer_id IN ("+uniqueAccounts+")"));
+						else
+						queryParent=entityService.getEntityManager().createNativeQuery(sqlQueryParent.toString().replace("IN_CLAUSE", ""));
+						queryParent.setParameter(1, year);
+						queryParent.setParameter(2, Customer);
+						queryParent.setParameter(3, BasePart);
+						queryParent.setParameter(4, Market);
+						queryParent.setParameter(5, SubMarket);
+						queryParent.setParameter(6, Program);
+						queryParent.setParameter(7, BU);
+						queryParent.setParameter(8, year);
+						queryParent.setParameter(9, Customer);
+						queryParent.setParameter(10, BasePart);
+						queryParent.setParameter(11, Market);
+						queryParent.setParameter(12, SubMarket);
+						queryParent.setParameter(13, Program);
+						queryParent.setParameter(14, BU);
+						queryParent.setParameter(15, year);
+						queryParent.setParameter(16, Customer);
+						queryParent.setParameter(17, BasePart);
+						queryParent.setParameter(18, Market);
+						queryParent.setParameter(19, SubMarket);
+						queryParent.setParameter(20, Program);
+						queryParent.setParameter(21, BU);
+						List forecastPerUser = queryParent.getResultList();
+						if(forecastPerUser!= null && !forecastPerUser.isEmpty()) {
+							forecasts.addAll(forecastPerUser);
+						}
+						log.info("year="+year);	
 					}
+					else
+					{
+						StringBuilder sqlQuery = new StringBuilder(Constants.GET_DATA_FOR_FORECAST);				
+						sqlQuery.append(getOrderByClause(sidx,sord));
+						if(uniqueAccounts!=null)
+						query=entityService.getEntityManager().createNativeQuery(sqlQuery.toString().toString().replace("NOTIN_CLAUSE", "AND f.end_customer_id NOT IN ("+uniqueAccounts+")"));
+						else
+						query=entityService.getEntityManager().createNativeQuery(sqlQuery.toString().toString().replace("NOTIN_CLAUSE", ""));
+						query.setParameter(1, year);
+						query.setParameter(2, salesUser.getId());
+						query.setParameter(3, Customer);
+						query.setParameter(4, BasePart);
+						query.setParameter(5, Market);
+						query.setParameter(6, SubMarket);
+						query.setParameter(7, Program);
+						query.setParameter(8, BU);
+						query.setParameter(9, year);
+						query.setParameter(10, salesUser.getId());
+						query.setParameter(11, Customer);
+						query.setParameter(12, BasePart);
+						query.setParameter(13, Market);
+						query.setParameter(14, SubMarket);
+						query.setParameter(15, Program);
+						query.setParameter(16, BU);
+						query.setParameter(17, year);
+						query.setParameter(18, salesUser.getId());
+						query.setParameter(19, Customer);
+						query.setParameter(20, BasePart);
+						query.setParameter(21, Market);
+						query.setParameter(22, SubMarket);
+						query.setParameter(23, Program);
+						query.setParameter(24, BU);
+						List forecastPerUser = query.getResultList();
+						if(forecastPerUser!= null && !forecastPerUser.isEmpty()) {
+							forecasts.addAll(forecastPerUser);
+						}
+						log.info("year="+year);	
+					}
+					
+				
 					
 //					if(forecasts!=null && !forecasts.isEmpty())
 //						log.info("forecast data found");
@@ -579,7 +627,16 @@ public class ForecastAction extends BaseAction {
 //						log.info("forecast data not found");
 				}
 			}
+		
+						
+			/*Set<String> forecastsUniqueSet = new HashSet<String>();
 
+			for(int i=0;i<forecasts.size();i++){
+				 Object[] row = (Object[]) forecasts.get(i);
+			    if( forecastsUniqueSet.add( String.valueOf(row[27] ))) {
+			    	forecastsUnique.add( row );
+			    }
+			}*/
 			// create forecastData json object begin
 			int rowPerPage = Integer.parseInt(rows);
 			int pageAsInt = Integer.parseInt(page);
